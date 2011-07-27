@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "First post on an SSG"
+title: "First Post on an SSG"
 date: 2011-07-27 16:31
 comments: true
 categories: ramble
