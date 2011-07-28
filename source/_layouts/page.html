@@ -5,7 +5,7 @@ layout: default
 <div>
 <article>
   <header>
-    <h1 class="entry-title">{{ page.title }}</h1>
+    <h1 class="entry-title">{{ page.title | titlecase }}</h1>
     {% if page.date %}<p class="meta">{% include post/date.html %}</p>{% endif %}
   </header>
   {{ content }}
