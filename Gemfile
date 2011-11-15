@@ -1,6 +1,6 @@
 source "http://rubygems.org"
 
-gem 'rake', '~> 0.8.7'
+gem 'rake', '~> 0.9.0'
 gem 'rack'
 gem 'jekyll'
 gem 'rdiscount'

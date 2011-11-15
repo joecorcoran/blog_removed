@@ -4,7 +4,7 @@
 
 url: http://joecorcoran.github.com
 title: Lapping it up with open arms
-subtitle: A blog about stuff
+subtitle: Joe Corcoran
 author: Joe Corcoran
 simple_search: http://google.com/search
 
@@ -12,7 +12,7 @@ simple_search: http://google.com/search
 subscribe_rss: /atom.xml
 subscribe_email:
 # RSS feeds can list your email address if you like
-email:
+email: joecorcoran@gmail.com
 
 # ----------------------- #
 #    Jekyll & Plugins     #
@@ -29,7 +29,7 @@ code_dir: downloads/code
 category_dir: categories
 archive_dir: archives
 markdown: rdiscount
-pygments: true
+pygments: false
 
 paginate: 10 # Posts per page on the blog index
 recent_posts: 3 # Posts in the sidebar Recent Posts section
@@ -39,7 +39,7 @@ recent_posts: 3 # Posts in the sidebar Recent Posts section
 # ----------------------- #
 
 # Twitter
-twitter_user: josephcorcoran
+twitter_user:
 twitter_tweet_count: 6
 twitter_show_replies: false
 twitter_follow_button: true

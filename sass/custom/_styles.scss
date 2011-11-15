@@ -35,6 +35,7 @@ body > nav {
 }
 
 a, aside[role=sidebar] a, #content .blog-index a[rel=full-article] {
+  color: $link-color !important;
   @include transition(color 0);
 }
 
