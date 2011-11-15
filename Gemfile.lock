@@ -58,7 +58,7 @@ DEPENDENCIES
   liquid (= 2.2.2)
   pygments.rb
   rack
-  rake (~> 0.9.0)
+  rake
   rb-fsevent
   rdiscount
   rubypants

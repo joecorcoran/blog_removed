@@ -1,12 +1,14 @@
 ---
 layout: post
-title: "Judge: Simple JavaScript Form Validation for Rails"
-date: 2011-11-14 14:04
+title: "Judge: Simple JavaScript form validation for Rails"
+date: 2011-11-15 13:17
 comments: true
-categories: [judge, javascript, rails, active_model, validation]
+categories: 
 ---
 
 Since I've just hit version 1.0.0 and settled on what I think is a developer-friendly interface, I thought it was probably time I wrote a bit about Judge, my client side form validation gem for Rails 3.
+
+<!--more-->
 
 ## Context
 
