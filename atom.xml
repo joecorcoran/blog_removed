@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title></title>
+  <link href="http://joecorcoran.github.com/atom.xml" rel="self"/>
+  <link href="http://joecorcoran.github.com/"/>
+  <updated>2011-11-17T15:21:38+00:00</updated>
+  <id>http://joecorcoran.github.com/</id>
+  <author>
+    <name>Joe Corcoran</name>
+    
+      <email>joecorcoran@gmail.com</email>
+    
+  </author>
+
+  
+</feed>
