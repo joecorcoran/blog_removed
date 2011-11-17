@@ -46,10 +46,12 @@ a, aside[role=sidebar] a, #content .blog-index a[rel=full-article] {
   @include transition(color 0);
 }
 
+#content .blog-index a[rel=full-article]:hover {
+  background: $solarized-bg;
+}
+
 a:hover { text-decoration:none; }
 
 article {
-  header {
-    h1, h2, h3, h4, h5, h6 { color: $solarized-bg; }
-  }
+  h1, h2, h3, h4, h5, h6 { color: $solarized-bg; }
 }

@@ -4,6 +4,7 @@ title: "Judge: Simple JavaScript form validation for Rails"
 date: 2011-11-15 13:17
 comments: true
 categories: 
+published: false
 ---
 
 Since I've just hit version 1.0.0 and settled on what I think is a developer-friendly interface, I thought it was probably time I wrote a bit about Judge, my client side form validation gem for Rails 3.
@@ -44,23 +45,27 @@ Add <code>:validate => true</code> to any form element that you wish to validate
 
 ### Quick validation
 
-Validate the <code>:name</code> input with JavaScript.
+The <code>judge</code> object has a static <code>validate</code> method for doing validation quick and dirty:
 
 {% codeblock lang:javascript %}
 judge.validate(document.getElementById('thing_name'));
-  // => { valid: false, element: HTMLInputElement&hellip;, messages: { blank: "Can't be blank" } }
+  // => { valid: false, element: HTMLInputElement..., messages: { blank: "Can't be blank" } }
 {% endcodeblock %}
 
-Validate on keyup (requires jQuery).
+The same method used within a <code>keyup</code> event handler (requires jQuery):
 
 {% codeblock lang:javascript %}
 $('input#thing_name').keyup(function() {
-  var input = $(this).get(0);
+  var input = this;
   console.log(judge.validate(input));
 });
 {% endcodeblock %}
 
+Note that we are not passing a jQuery object into the <code>validate</code> method here, but the DOM element itself. The [jQuery **get** method](http://api.jquery.com/get/) will often be of use when validating elements that have been wrapped by jQuery.
+
 ### Validation with watchers
+
+Most of the features of Judge are based around watchers &#8211; JavaScript objects that hold information about the form elements to which they refer.
 
 {% codeblock lang:javascript %}
 // instantiate watcher
@@ -69,19 +74,25 @@ var nameInput   = document.getElementById('thing_name'),
 
 // some time later:
 nameWatcher.validate();
-  // => { valid: false, element: HTMLInputElement&hellip;, messages: { blank: "Can't be blank" } }
+  // => { valid: false, element: HTMLInputElement..., messages: { blank: "Can't be blank" } }
 {% endcodeblock %}
 
 ### Validating stored elements
 
+Most of the time, validating immediately on <code>keyup</code> or <code>change</code> will be enough to achieve the intended user experience.  But there are times when storing a reference to a form element, or a group of form elements, can be useful. For example, validating elements conditionally based on user triggers. This is where the Judge <code>store</code> comes in.
+
 {% codeblock lang:javascript %}
-// save all text input elements within form.thing-form against key 'foo'
+// save all text input elements within form.thing-form
 var textInputs = document.querySelectorAll('form.thing-form input[type=text]');
 judge.store.save('foo', textInputs);
 
+// retrieve watchers for your stored elements
+
+// retrieve your stored elements
+
 // validate all elements stored against key 'foo'
 judge.store.validate('foo');
-  // => [ { valid: true, &hellip; }, { valid: false, &hellip; }, { valid: false, &hellip; } ]
+  // => [ { valid: true, ... }, { valid: false, ... }, { valid: false, ... } ]
 {% endcodeblock %}
 
 [csv]: https://github.com/bcardarella/client_side_validations "Client Side Validations gem by Brian Cardarella"
