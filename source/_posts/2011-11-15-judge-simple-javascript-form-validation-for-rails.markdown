@@ -10,7 +10,7 @@ categories:
   - rails
   - active_record
   - validation
-published: false
+published: true
 ---
 
 Since version 1.0 has just been released and I've settled on what I hope is a friendly interface, I thought it was probably time I wrote a bit about [Judge][j_rg], my client side form validation gem for Rails 3.

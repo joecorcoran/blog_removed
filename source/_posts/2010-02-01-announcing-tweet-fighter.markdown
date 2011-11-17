@@ -1,0 +1,43 @@
+---
+layout: post
+title: "Announcing Tweet Fighter"
+date: 2010-02-01 21:46
+comments: true
+categories: [twitter, ruby, sinatra, sequel, projects, thin]
+---
+
+Firstly: allow me to bash the bible for a few lines.  Over the past year or so I've become enamoured with <a href="http://www.sinatrarb.com/" title="Sinatra, a Ruby HTTP framework">Sinatra, the Ruby microframework</a>.  I've toyed with it, pushed it around, made it do things it didn't want to do, locked it out in the cold and like a terminally happy pet, it still keeps coming back for more.  Sinatra's versatility is a product of its simplicity – it does its job well and the rest is up to you.  Anyway, enough proselytising… on to <a href="http://tweetfight.me">Tweet Fighter</a>.
+
+<!--more-->
+
+## Concept
+
+You submit two <a href="http://twitter.com">Twitter</a> users, who are then queried a handful of times through the Twitter <acronym title="Application Programming Interface">API</acronym> and a "fight" of sorts is created between the two users.  They are attributed points based on various "fight"-worthy criteria: bad language; negative language (words like "kill" or "hate", for instance); previous Tweet Fighter fight record; and – this being Twitter – number of followers and number of tweets to date.  The (fuzzy) thinking behind this is that, along with the fighting talk, the mouthiest users with the most backup from their group would have an advantage in a fight situation.
+
+It's pretty silly, I know.  I considered hacking away at some kind of worthy cause, but I'm a big kid.  Maybe I'll get around to creating a parking metre/carbon emissions cross-referencing Google Maps mashup one day when I'm older and crabbier.  Hopefully nobody reading this will assume that I'm advocating random violence by making a fight-based application, but we'll see.
+
+I lifted the visuals from <a href="http://en.wikipedia.org/wiki/Street_Fighter_II" title="Street Fighter II on Wikipedia">Street Fighter II</a>, which was one of my favourite games as a kid (please don't cease-and-desist me, <a href="http://en.wikipedia.org/wiki/Capcom" title="Capcom on Wikipedia">Capcom</a>.  It's a tribute).  I seem to remember playing as <a href="http://en.wikipedia.org/wiki/Vega_%28Street_Fighter%29" title="Vega, the Street Fighter character, on Wikipedia">Vega</a> a lot, despite him not being very good.
+
+## Inside
+
+As mentioned before, Tweet Fighter is written in Ruby, on Sinatra.  My <acronym title="Object Relational Mapping">ORM</acronym> buddy of choice right now is <a href="http://sequel.rubyforge.org/" title="Sequel at Rubyforge">Sequel</a>.  I like the intuitive, chainable query syntax.  As such, I was happy to see the recent announcement regarding <a href="http://m.onkey.org/2010/1/22/active-record-query-interface" title="Pratik's post about the future of the Active Record's query interface">plans to make Active Record more, well… Sequel-esque</a>.
+
+I'm also using <a href="http://github.com/jnunemaker/httparty" title="httparty source code at GitHub">httparty</a> to allow users to tweet directly from their fight pages – basic authorisation is easy with httparty and it felt like a much better fit than overkilling the project with <a href="http://oauth.net/" title="OAuth, the open authorisation protocol">OAuth</a>.
+
+## Issues
+
+Overall, the Twitter API is easy to work with.  It's a little weird having the search API split away from the remainder of it, but it's no big deal.  One major limitation of the Twitter <acronym title="Application Programming Interface">API</acronym> – the unsearchable nature of any status updates over a certain age – actually turned out to be a blessing.  It means that fights involving the same Twitter users will be different from week to week (or even day to day), depending on how sweary/misanthropic the users have been feeling recently.  Sure, follower counts will remain roughly the same for weeks on end, but a couple of good old blue-tinted rants about your local transport provider will have you beating opponents in no time.
+
+## Future
+
+A leaderboard is in order.  Anything else I think of <em>might</em> just get done too.  Any suggestions/bugs/breakages, please let me know.
+
+<p><a href="http://tweetfight.me" title="Tweet Fighter">I want to go to there</a></p>
+
+## Update, 12 Feb 2010
+
+I've just read that <a href="http://groups.google.com/group/twitter-development-talk/browse_thread/thread/c2c4963061422f28?pli=1" title="Twitter Development Talk on Google Groups">Twitter is phasing out basic authentication</a> much sooner than I'd anticipated.  Will have to get cracking on OAuth!
+
+## Update, 18 June 2010
+
+I stripped out the basic auth tweet form and replaced it with a TweetBox from Twitter's <a href="http://dev.twitter.com/anywhere" title="@Anywhere">@Anywhere</a> platform.  Pro: Trading a controller action and two gems for a few lines of JavaScript isn't bad at all;  Con: non-JS users miss out again.
