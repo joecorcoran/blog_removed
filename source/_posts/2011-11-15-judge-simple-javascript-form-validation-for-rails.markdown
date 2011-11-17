@@ -3,11 +3,17 @@ layout: post
 title: "Judge: Simple JavaScript form validation for Rails"
 date: 2011-11-15 13:17
 comments: true
-categories: 
+categories:
+  - judge
+  - javascript
+  - ruby
+  - rails
+  - active_record
+  - validation
 published: false
 ---
 
-Since I've just hit version 1.0.0 and settled on what I think is a developer-friendly interface, I thought it was probably time I wrote a bit about Judge, my client side form validation gem for Rails 3.
+Since version 1.0 has just been released and I've settled on what I hope is a friendly interface, I thought it was probably time I wrote a bit about [Judge][j_rg], my client side form validation gem for Rails 3.
 
 <!--more-->
 
@@ -23,21 +29,15 @@ I wanted a solution that was as small as possible. This is a simple job – no n
 
 Add validation to an attribute in your model.
 
-{% codeblock lang:ruby %}
+{% codeblock app/models/thing.rb lang:ruby %}
 class Thing < ActiveRecord::Base
   validates :name, :presence => true
 end
 {% endcodeblock %}
 
-Use the <code>Judge::FormBuilder</code> in your view.
+Use the <code>Judge::FormBuilder</code> in your view. Add <code>:validate => true</code> to the options hash of any form element that you wish to validate on the client side.
 
-{% codeblock lang:ruby %}
-<%= form_for(@thing, :builder => Judge::FormBuilder) %>
-{% endcodeblock %}
-
-Add <code>:validate => true</code> to any form element that you wish to validate on the client side.
-
-{% codeblock lang:ruby %}
+{% codeblock app/views/things/new.html.erb lang:ruby %}
 <%= form_for(@thing, :builder => Judge::FormBuilder) do |f| %>
   <%= f.text_field :name, :validate => true %>
 <% end %>
@@ -45,7 +45,7 @@ Add <code>:validate => true</code> to any form element that you wish to validate
 
 ### Quick validation
 
-The <code>judge</code> object has a static <code>validate</code> method for doing validation quick and dirty:
+The <code>judge</code> object has a static <code>validate</code> method for immediate validation:
 
 {% codeblock lang:javascript %}
 judge.validate(document.getElementById('thing_name'));
@@ -65,7 +65,7 @@ Note that we are not passing a jQuery object into the <code>validate</code> meth
 
 ### Validation with watchers
 
-Most of the features of Judge are based around watchers &#8211; JavaScript objects that hold information about the form elements to which they refer.
+Most of the features of Judge are based around watchers &#8211; JavaScript objects that hold information about the form elements to which they point.
 
 {% codeblock lang:javascript %}
 // instantiate watcher
@@ -82,18 +82,35 @@ nameWatcher.validate();
 Most of the time, validating immediately on <code>keyup</code> or <code>change</code> will be enough to achieve the intended user experience.  But there are times when storing a reference to a form element, or a group of form elements, can be useful. For example, validating elements conditionally based on user triggers. This is where the Judge <code>store</code> comes in.
 
 {% codeblock lang:javascript %}
-// save all text input elements within form.thing-form
+// store some text input elements
 var textInputs = document.querySelectorAll('form.thing-form input[type=text]');
 judge.store.save('foo', textInputs);
 
 // retrieve watchers for your stored elements
+judge.store.get('foo');
+  // => [ { element: HTMLInputElement... }, { element: HTMLInputElement... }, ... ]
 
 // retrieve your stored elements
+judge.store.getDOM('foo');
+  // => [ HTMLInputElement, HTMLInputElement, ... ]
 
 // validate all elements stored against key 'foo'
 judge.store.validate('foo');
-  // => [ { valid: true, ... }, { valid: false, ... }, { valid: false, ... } ]
+  // => [ { valid: true, ... }, { valid: false, ... }, ... ]
 {% endcodeblock %}
 
+## Use it
+
+Go ahead! Feedback is all kinds of welcome.
+
+{% codeblock Gemfile %}
+gem "judge", "~> 1.0.0"
+{% endcodeblock %}
+
+* [Judge on RubyGems.org][j_rg] 
+* [Judge documentation](http://joecorcoran.github.com/judge) 
+* [Judge source on GitHub](http://github.com/joecorcoran/judge) 
+
+[j_rg]: https://rubygems.org/gems/judge
 [csv]: https://github.com/bcardarella/client_side_validations "Client Side Validations gem by Brian Cardarella"
 [lv]: https://github.com/alechill/livevalidation "LiveValidation by Alec Hill"
