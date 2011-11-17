@@ -1,0 +1,502 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: javascript | Lapping it up with open arms]]></title>
+  <link href="http://joecorcoran.github.com/categories/javascript/atom.xml" rel="self"/>
+  <link href="http://joecorcoran.github.com/"/>
+  <updated>2011-11-17T23:41:11+00:00</updated>
+  <id>http://joecorcoran.github.com/</id>
+  <author>
+    <name><![CDATA[Joe Corcoran]]></name>
+    <email><![CDATA[joecorcoran@gmail.com]]></email>
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Judge: Simple JavaScript form validation for Rails]]></title>
+    <link href="http://joecorcoran.github.com/2011/11/15/judge-simple-javascript-form-validation-for-rails"/>
+    <updated>2011-11-15T13:17:00+00:00</updated>
+    <id>http://joecorcoran.github.com/2011/11/15/judge-simple-javascript-form-validation-for-rails</id>
+    <content type="html"><![CDATA[<p>Since version 1.0 has just been released and I've settled on what I hope is a friendly interface, I thought it was probably time I wrote a bit about <a href="https://rubygems.org/gems/judge">Judge</a>, my client side form validation gem for Rails 3.</p>
+
+<!--more-->
+
+
+<h2>Context</h2>
+
+<p>There are some other gems out there that attempt to solve this problem, so it would be remiss of me not to mention them. <a href="https://github.com/bcardarella/client_side_validations" title="Client Side Validations gem by Brian Cardarella">Client Side Validations</a> is feature-rich and does a lot of work for you.  There's also <a href="https://github.com/alechill/livevalidation" title="LiveValidation by Alec Hill">LiveValidation</a>, which has been around for a long time and might be a good choice for people with legacy Rails apps that need Prototype.</p>
+
+<p>I wanted a solution that was as small as possible. This is a simple job – no need for middleware, no need for extensions to core Ruby classes.  I also wanted it to be as flexible as possible - no assumptions should be made about form markup, styles, classes and so on. I started hacking away, using the jQuery plugin pattern as a starting point for the client side code. It soon became clear that jQuery had to go. Writing Judge as a jQuery plugin was a mistake – the code I wrote ended up tightly coupled to specific event bindings, specific DOM elements etc. That kind of stuff should really be left for the user to decide.</p>
+
+<h2>Examples</h2>
+
+<h3>Setup</h3>
+
+<p>Add validation to an attribute in your model.</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>app/models/thing.rb  </span></figcaption>
+ <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">Thing</span> <span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span> <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Base</span>
+</span><span class='line'>  <span class="n">validates</span> <span class="ss">:name</span><span class="p">,</span> <span class="ss">:presence</span> <span class="o">=&gt;</span> <span class="kp">true</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>Use the <code>Judge::FormBuilder</code> in your view. Add <code>:validate => true</code> to the options hash of any form element that you wish to validate on the client side.</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>app/views/things/new.html.erb  </span></figcaption>
+ <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="sx">%= form_for(@thing, :builder =</span><span class="o">&gt;</span> <span class="no">Judge</span><span class="o">::</span><span class="no">FormBuilder</span><span class="p">)</span> <span class="k">do</span> <span class="o">|</span><span class="n">f</span><span class="o">|</span> <span class="sx">%&gt;</span>
+</span><span class='line'><span class="sx">  &amp;lt;%= f.text_field :name, :validate =&gt;</span> <span class="kp">true</span> <span class="sx">%&gt;</span>
+</span><span class='line'><span class="sx">&amp;lt;% end %&gt;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<h3>Quick validation</h3>
+
+<p>The <code>judge</code> object has a static <code>validate</code> method for immediate validation:</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">judge</span><span class="p">.</span><span class="nx">validate</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">&#39;thing_name&#39;</span><span class="p">));</span>
+</span><span class='line'>  <span class="c1">// =&gt; { valid: false, element: HTMLInputElement..., messages: { blank: &quot;Can&#39;t be blank&quot; } }</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>The same method used within a <code>keyup</code> event handler (requires jQuery):</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">$</span><span class="p">(</span><span class="s1">&#39;input#thing_name&#39;</span><span class="p">).</span><span class="nx">keyup</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>  <span class="kd">var</span> <span class="nx">input</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
+</span><span class='line'>  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">judge</span><span class="p">.</span><span class="nx">validate</span><span class="p">(</span><span class="nx">input</span><span class="p">));</span>
+</span><span class='line'><span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>Note that we are not passing a jQuery object into the <code>validate</code> method here, but the DOM element itself. The <a href="http://api.jquery.com/get/">jQuery <strong>get</strong> method</a> will often be of use when validating elements that have been wrapped by jQuery.</p>
+
+<h3>Validation with watchers</h3>
+
+<p>Most of the features of Judge are based around watchers &#8211; JavaScript objects that hold information about the form elements to which they point.</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="c1">// instantiate watcher</span>
+</span><span class='line'><span class="kd">var</span> <span class="nx">nameInput</span>   <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">&#39;thing_name&#39;</span><span class="p">),</span><span class="o">&lt;</span><span class="err">/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nx">pre</span><span class="o">&gt;&lt;</span><span class="nx">code</span><span class="o">&gt;</span><span class="nx">nameWatcher</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">judge</span><span class="p">.</span><span class="nx">Watcher</span><span class="p">(</span><span class="nx">nameInput</span><span class="p">);</span>
+</span><span class='line'><span class="o">&lt;</span><span class="err">/code&gt;&lt;/pre&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nx">p</span><span class="o">&gt;</span><span class="c1">// some time later:</span>
+</span><span class='line'><span class="nx">nameWatcher</span><span class="p">.</span><span class="nx">validate</span><span class="p">();</span>
+</span><span class='line'>  <span class="c1">// =&gt; { valid: false, element: HTMLInputElement..., messages: { blank: &quot;Can&#39;t be blank&quot; } }</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<h3>Validating stored elements</h3>
+
+<p>Most of the time, validating immediately on <code>keyup</code> or <code>change</code> will be enough to achieve the intended user experience.  But there are times when storing a reference to a form element, or a group of form elements, can be useful. For example, validating elements conditionally based on user triggers. This is where the Judge <code>store</code> comes in.</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="c1">// store some text input elements</span>
+</span><span class='line'><span class="kd">var</span> <span class="nx">textInputs</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">querySelectorAll</span><span class="p">(</span><span class="s1">&#39;form.thing-form input[type=text]&#39;</span><span class="p">);</span>
+</span><span class='line'><span class="nx">judge</span><span class="p">.</span><span class="nx">store</span><span class="p">.</span><span class="nx">save</span><span class="p">(</span><span class="s1">&#39;foo&#39;</span><span class="p">,</span> <span class="nx">textInputs</span><span class="p">);</span><span class="o">&lt;</span><span class="err">/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nx">p</span><span class="o">&gt;</span><span class="c1">// retrieve watchers for your stored elements</span>
+</span><span class='line'><span class="nx">judge</span><span class="p">.</span><span class="nx">store</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;foo&#39;</span><span class="p">);</span>
+</span><span class='line'>  <span class="c1">// =&gt; [ { element: HTMLInputElement... }, { element: HTMLInputElement... }, ... ]&lt;/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nx">p</span><span class="o">&gt;</span><span class="c1">// retrieve your stored elements</span>
+</span><span class='line'><span class="nx">judge</span><span class="p">.</span><span class="nx">store</span><span class="p">.</span><span class="nx">getDOM</span><span class="p">(</span><span class="s1">&#39;foo&#39;</span><span class="p">);</span>
+</span><span class='line'>  <span class="c1">// =&gt; [ HTMLInputElement, HTMLInputElement, ... ]&lt;/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nx">p</span><span class="o">&gt;</span><span class="c1">// validate all elements stored against key &#39;foo&#39;</span>
+</span><span class='line'><span class="nx">judge</span><span class="p">.</span><span class="nx">store</span><span class="p">.</span><span class="nx">validate</span><span class="p">(</span><span class="s1">&#39;foo&#39;</span><span class="p">);</span>
+</span><span class='line'>  <span class="c1">// =&gt; [ { valid: true, ... }, { valid: false, ... }, ... ]</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<h2>Use it</h2>
+
+<p>Go ahead! Feedback is all kinds of welcome.</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>Gemfile </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>gem "judge", "~> 1.0.0"</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<ul>
+<li><a href="https://rubygems.org/gems/judge">Judge on RubyGems.org</a></li>
+<li><a href="http://joecorcoran.github.com/judge">Judge documentation</a></li>
+<li><a href="http://github.com/joecorcoran/judge">Judge source on GitHub</a></li>
+</ul>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Testing bound jQuery events]]></title>
+    <link href="http://joecorcoran.github.com/2010/11/12/testing-bound-jquery-events"/>
+    <updated>2010-11-12T21:29:00+00:00</updated>
+    <id>http://joecorcoran.github.com/2010/11/12/testing-bound-jquery-events</id>
+    <content type="html"><![CDATA[<p>I've been using <a href="http://pivotal.github.com/jasmine/">Jasmine</a>, along with velesin's <a href="https://github.com/velesin/jasmine-jquery">jasmine-jquery</a>, to test all of my JavaScript work recently.  jasmine-jquery provides some really handy matchers, but one thing that's missing is the ability to test whether an element has a bound event.</p>
+
+<!--more-->
+
+
+<p>I've come up with the following matcher to do just that:</p>
+
+<p><div><script src='https://gist.github.com/674339.js?file=toHaveEvent.js'></script>
+<noscript><pre><code>toHaveEvent: function(eventType){
+  return (this.actual.data('events')) &amp;&amp; (typeof this.actual.data('events')[eventType] == 'object');
+}</code></pre></noscript></div>
+</p>
+
+<p>Use it like so: <code>expect($('input#foo')).toHaveEvent('keyup');</code></p>
+
+<p>I'd be interested to hear of any thoughts or improvements.  Likewise, I've started work on testing for events attached using <code>$.fn.live()</code>.  These are handled a bit differently, since live events aren't actually bound to the selected element.  Instead they sit there, bound to the <code>document</code>, listening for the event to bubble up the <acronym title="Document Object Model">DOM</acronym> tree.</p>
+
+<p><div><script src='https://gist.github.com/674339.js?file=toHaveLive.js'></script>
+<noscript><pre><code>toHaveLive: function(eventType) {
+  var hasLive, actual = this.actual;
+  $.each($(document).data('events')['live'], function(i, item) {          
+    hasLive = ((item.selector == actual.selector) &amp;&amp; (item.origType == eventType));
+    if (hasLive) return false;          
+  });        
+  return hasLive;
+}</code></pre></noscript></div>
+</p>
+
+<p>So: <code>expect($('input#bar')).toHaveLive('focus');</code></p>
+
+<p>Again, any improvements or thoughts are welcome.</p>
+
+<p>You can make these matchers available by using <a href="http://pivotal.github.com/jasmine/matchers.html" title="Jasmine matchers"><code>this.addMatchers</code></a>.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[When Sammy Met Jasmine]]></title>
+    <link href="http://joecorcoran.github.com/2010/09/01/when-sammy-met-jasmine"/>
+    <updated>2010-09-01T21:37:00+01:00</updated>
+    <id>http://joecorcoran.github.com/2010/09/01/when-sammy-met-jasmine</id>
+    <content type="html"><![CDATA[<h2>Testing Sammy JavaScript apps with Pivotal Labs' Jasmine BDD framework</h2>
+
+<p>Aaron Quint's route-driven JavaScript framework <a href="http://github.com/quirkey/sammy" title="Sammy framework on GitHub">Sammy</a>, ships with <a href="http://github.com/jquery/qunit/" title="QUnit jQuery testing framework on GitHub">QUnit</a> tests. This is an obvious choice, since QUnit is jQuery's test framework and Sammy depends on jQuery. I, however, am not the biggest fan of QUnit. It works really well, but I find the syntax a little unwieldy.  On a recent project, I thought I'd try out <a href="http://github.com/pivotal/jasmine">Jasmine – a library-independent JavaScript <acronym title="Behaviour Driven Development">BDD</acronym> framework</a> with a more readable syntax.</p>
+
+<p>In this post I'll run through some typical Sammy scenarios and show you how I've written the corresponding Jasmine tests.  For reference, I'm using Jasmine 0.11.1 and Sammy 0.5.4.</p>
+
+<!--more-->
+
+
+<h2>Setting up Sammy</h2>
+
+<p>Let's start with a fairly simple Sammy app with some common features.</p>
+
+<p><div><script src='https://gist.github.com/560735.js?file=app.js'></script>
+<noscript><pre><code>var app = $.sammy(function() {
+						   
+    var context = this;
+						   
+    this.get('#/', function() {
+        this.trigger('myEvent', { h1: 'My app',  text: 'world' });
+    });
+	
+    this.bind('myEvent', function(e, opts) {
+        $('h1').html(opts.h1);
+        $('p#text').html(context.url.build('hello', opts.text));
+    });
+	
+    this.url = {
+        build: function(key, val) {
+            return '#/'+key+'/'+val;
+        }
+    };
+	
+});
+
+$(function() {
+    app.run('#/');		   
+});</code></pre></noscript></div>
+</p>
+
+<p>At the top of the app, the <code>context</code> variable is assigned, providing easy and unambiguous access to the <code>Sammy.Application</code> instance itself, for use elsewhere.  A GET route is declared, which simply triggers an event named <code>myEvent</code>.  The second argument to <code>trigger</code> passes an object to the event:</p>
+
+<p><div><script src='https://gist.github.com/560735.js?file=app_pt1.js'></script>
+<noscript><pre><code>var context = this;
+						   
+this.get('#/', function() {
+    this.trigger('myEvent', { h1: 'My app',  text: 'world' });
+});</code></pre></noscript></div>
+</p>
+
+<p>Here is the event that was triggered in the GET route.  Bound events accept a custom object as their second argument, which is used in this example to pass in some arbitrary values:</p>
+
+<p><div><script src='https://gist.github.com/560735.js?file=app_pt2.js'></script>
+<noscript><pre><code>this.bind('myEvent', function(e, opts) {
+    $('h1').html(opts.h1);
+    $('p#text').html(context.url.build('hello', opts.text));
+});</code></pre></noscript></div>
+</p>
+
+<p>Here, a (very) rough example of a modular design pattern is established for any non-event driven parts of the app.  I like to group functions by similarity of purpose.</p>
+
+<p><div><script src='https://gist.github.com/560735.js?file=app_pt3.js'></script>
+<noscript><pre><code>this.url = {
+    build: function(key, val) {
+        return '#/'+key+'/'+val;
+    }
+};</code></pre></noscript></div>
+</p>
+
+<h3>An aside: Can I read all this shit easily?</h3>
+
+<p>I've started to ask myself this question frequently.  If the answer is no, it's time to abstract.</p>
+
+<p>Particularly where jQuery is involved, I often find code that looks similar to this:</p>
+
+<p><div><script src='https://gist.github.com/563595.js?file=chain_soup.js'></script>
+<noscript><pre><code>function DoTooMuchStuff(num) {
+    $('p#mypar_'+num).slideUp(400).remove();
+    $('h3#myheading_'+num).html('No records found');
+    context.trigger('updateStoredRecords', { remove: num });
+    var delimiter = ($('ul#removed &gt; li').size() &gt; 0) ? ', ' : '';
+    $('ul#removed').append($('&lt;li/&gt;').html(delimiter+GetName(num)));
+};
+</code></pre></noscript></div>
+</p>
+
+<p>It only takes a few lines of jQuery, chained to the hilt, to achieve a lot.  This is seen as an advantage, and rightly so for small pieces of UI scripting, but it's a huge pain when testing larger applications since it leads to bloated specs.  Imagine trying to test the above example – a long list of calls needs a long list of assertions.  But testing needn't be a chore!  Whichever way a JavaScript project is structured, from fully modular and enclosed to fly-open-for-everyone-to-see, keeping functions succinct and limited in purpose makes for much easier testing.  Readable code == readable tests == clear statement of intentions to leave for future developers == painless development.</p>
+
+<h2>Testing with Jasmine</h2>
+
+<p>Here's an initial attempt at testing the above Sammy app using Jasmine.  The specs are within <code>describe</code> blocks.  These aren't strictly necessary but nesting them helps to describe your tests in relation to the structure of your app.  See how the nesting follows the namespacing of the <code>url.build</code> function, for example:</p>
+
+<p><div><script src='https://gist.github.com/560735.js?file=appSpecWithout.js'></script>
+<noscript><pre><code>describe('myEvent', function() {
+							 
+    beforeEach(function() {
+        $('body').append('&lt;div id=&quot;jasmine&quot;&gt;&lt;h1&gt;Heading&lt;/h1&gt;&lt;p id=&quot;text&quot;&gt;Replace me&lt;/p&gt;&lt;/div&gt;');
+        opts = {
+            h1: 'My app',
+            text: 'world'
+        };
+        app.trigger('myEvent', opts);
+    });
+
+    afterEach(function() {
+        $('div#jasmine').empty().remove();
+    });
+	
+    it('should set h1', function() {
+        expect($('h1').html()).toMatch(/My app/);
+    });
+	
+    it('should show something in place of default text', function() {
+        expect($('p#text').html()).not.toMatch(/Replace me/);
+        expect($('p#text').html().length).toBeGreaterThan(0);
+    });
+	
+});
+
+describe('url', function() {
+	
+    describe('build', function() {
+		
+        it('should return properly formed hash-based url', function() {
+            var url = app.url.build('foo', 'bar');
+            expect(url).toEqual('#/foo/bar');
+        });
+		
+    });
+	
+});</code></pre></noscript></div>
+</p>
+
+<p>Since the app involves <acronym title="Document Object Model">DOM</acronym> insertion, it's clear that some kind of setup and teardown of temporary DOM elements is required.  Using Jasmine's <code>beforeEach</code> method, the relevant elements are inserted into the DOM before each spec is run. Since each spec within this <code>describe</code> block refers to the same event, the event trigger is here as well, to avoid repetition.  The DOM elements are cleaned up using <code>afterEach</code>.</p>
+
+<p><div><script src='https://gist.github.com/560735.js?file=appSpecWithout_wrap.js'></script>
+<noscript><pre><code>beforeEach(function() {
+    $('body').append('&lt;div id=&quot;jasmine&quot;&gt;&lt;h1&gt;Heading&lt;/h1&gt;&lt;p id=&quot;text&quot;&gt;Replace me&lt;/p&gt;&lt;/div&gt;');
+    opts = {
+        h1: 'My app',
+        text: 'world'
+    };
+    app.trigger('myEvent', opts);
+});
+
+afterEach(function() {
+    $('div#jasmine').empty().remove();
+});</code></pre></noscript></div>
+</p>
+
+<p>Specs are enclosed in the <code>it</code> blocks and assertions/expectations are made using <code>expect</code>.  The syntax, when read out loud, sounds pretty close to how I'd describe my tests.  "It <em>should etc.</em>"; "Expect <em>actual</em> to match <em>expression</em>".  <a href="http://pivotal.github.com/jasmine/jsdoc/symbols/jasmine.Matchers.html">Jasmine has various matcher methods</a> such as <code>toMatch</code>.</p>
+
+<p><div><script src='https://gist.github.com/560735.js?file=appSpecWithout_spec1.js'></script>
+<noscript><pre><code>it('should set h1', function() {
+    expect($('h1').html()).toMatch(/My app/);
+});</code></pre></noscript></div>
+</p>
+
+<h3>Befriending the DOM</h3>
+
+<p>There's something a little clunky about certain aspects of the above tests.  In particular the DOM-related areas look a little hacky.  It would be unfair to call this a fault of the testing framework – DOM manipulation isn't even on the Jasmine agenda.  So this is where <a href="http://github.com/velesin/jasmine-jquery">velesin's jasmine-jquery extensions</a> step in.</p>
+
+<p>jasmine-jquery allows for various improvements on the original tests:</p>
+
+<p><div><script src='https://gist.github.com/560735.js?file=appSpec.js'></script>
+<noscript><pre><code>describe('myEvent', function() {
+							 
+    beforeEach(function() {
+        loadFixtures('fixtures/test.html');
+        opts = {
+            h1: 'My app',
+            text: 'world'
+        };
+        app.trigger('myEvent', opts);
+    });
+	
+    it('should set h1', function() {
+        expect($('h1')).toHaveText(opts.h1);
+    });
+	
+    it('should show something in place of default text', function() {
+        expect($('p#text')).not.toHaveText('Replace me');
+        expect($('p#text')).not.toBeEmpty();
+    });
+	
+});
+
+describe('url', function() {
+	
+    describe('build', function() {
+		
+        it('should return properly formed hash-based url', function() {
+            var url = app.url.build('foo', 'bar');
+            expect(url).toEqual('#/foo/bar');
+        });
+		
+    });
+	
+});</code></pre></noscript></div>
+</p>
+
+<p>Firstly, the manual setup and teardown is no longer required, thanks to <code>loadFixtures</code>, which loads in the necessary DOM elements from an external file, inserts them into a wrapper div inside the document body, and cleans up automatically after each spec is run.  Big win.  People who are really smart might even try to load fixtures in from the same files as partials to avoid duplication (I have a feeling this could all come together beautifully with <a href="http://code.quirkey.com/sammy/docs/api.html#Sammy.Meld">Sammy's new Meld feature</a>…).  An alternative is to use <code>setFixtures</code>, which accepts either an HTML string or a jQuery element as its only argument rather than loading from an external file.</p>
+
+<p><div><script src='https://gist.github.com/560735.js?file=appSpec_fixture.js'></script>
+<noscript><pre><code>beforeEach(function() {
+    loadFixtures('fixtures/test.html');
+    opts = {
+        h1: 'My app',
+        text: 'world'
+    };
+    app.trigger('myEvent', opts);
+});</code></pre></noscript></div>
+</p>
+
+<p>jasmine-jquery also provides a set of <a href="http://github.com/velesin/jasmine-jquery#readme">custom matchers</a>.  Here, for example, there's no need for the workaround of checking the innerHtml of an element against a regular expression, when <code>toHaveText</code> does the trick.</p>
+
+<p><div><script src='https://gist.github.com/560735.js?file=appSpec_matchers.js'></script>
+<noscript><pre><code>it('should set h1', function() {
+    expect($('h1')).toHaveText(opts.h1);
+});
+	
+it('should show something in place of default text', function() {
+    expect($('p#text')).not.toHaveText('Replace me');
+    expect($('p#text')).not.toBeEmpty();
+});</code></pre></noscript></div>
+</p>
+
+<h2>Conclusions</h2>
+
+<p>The Jasmine documentation could really do with a spruce up – especially in the less immediately obvious areas like spying, mocking and stubbing.  It's possible to bundle through and get some pretty nifty async tests running (blog post on this topic pending) but clearer instructions would be a big help.  I'm sure better docs are in the pipeline with version 1.0.0 proper due to be released soon.</p>
+
+<p>I find testing with Jasmine a more pleasant experience than any I've had with another JavaScript testing framework.  The only thing that has come close for me is <a href="http://visionmedia.github.com/jspec/" title="JSpec testing framework on GitHub">JSpec</a>, which has very similar syntax to Jasmine if you eschew the custom Rubyesque grammar.</p>
+
+<p>Provided you structure your Sammy application in a sensible way, it's easily testable with Jasmine.  I'd like a way of testing the Sammy routes themselves, something akin to functional testing as apposed to unit testing.  But I'm happy enough with relying on the Sammy internal tests and keeping the routes as simple trigger calls.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Practical uses for Sammy]]></title>
+    <link href="http://joecorcoran.github.com/2009/07/02/practical-uses-for-sammy"/>
+    <updated>2009-07-02T21:52:00+01:00</updated>
+    <id>http://joecorcoran.github.com/2009/07/02/practical-uses-for-sammy</id>
+    <content type="html"><![CDATA[<p>I've recently been looking into a new Javascript framework named <a href="http://code.quirkey.com/sammy/" title="Sammy homepage at Quirkey.com">Sammy</a>, written by the most excellent <a href="http://www.quirkey.com/blog/" title="Aaron Quint's blog">Aaron Quint</a>.  It was built on top of <a href="http://jquery.com/" title="jQuery site">jQuery</a> and intended to allow developers to build one-page applications, utilising the <acronym title="Uniform Resource Locator">URL</acronym> hash (the portion of the <acronym title="Uniform Resource Locator">URL</acronym> from the # symbol onwards) usually reserved for on-page anchors to give Javascript functions lovely descriptive routes.</p>
+
+<p>I'm looking forward to writing applications in this way (and I'm trying to think of an excuse to do so), but what Sammy also kindly allows is direct, linkable access to the inner workings of some of the more usual Javascript implementations too.</p>
+
+<p>I've put a few examples together to demonstrate.</p>
+
+<!--more-->
+
+
+<h2>jQuery Accordion</h2>
+
+<p>Pretty much every developer out there who deals with the front-end will have come across collapsing accordion-style lists.  They're in wide use nowadays as they make pages with lots of text look a lot friendlier (for example <acronym title="Frequently Asked Questions">FAQ</acronym> pages).  Also, people like seeing stuff move around.</p>
+
+<p>But what if you wanted to retain the accordion effect, whilst providing users/clients with direct links to the page with a particular list item expanded?</p>
+
+<p><a href="http://playground.joecorcoran.co.uk/sammy/accordion/" title="Sammy / Accordion example">http://playground.joecorcoran.co.uk/sammy/accordion/</a></p>
+
+<p>Click around and notice that the <acronym title="Uniform Resource Locator">URL</acronym> in the address bar is changing. If you copy one of the new <acronym title="Uniform Resource Locator">URL</acronym>s, like</p>
+
+<p><a href="http://playground.joecorcoran.co.uk/sammy/accordion/#/section/3" title="Sammy / Accordion example link straight to expanded section">http://playground.joecorcoran.co.uk/sammy/accordion/#/section/3</a></p>
+
+<p>into a new window, you'll be taken to the same page with the 3rd section expanded.</p>
+
+<p><a href="http://gist.github.com/128728" title="Sammy Accordion code Gist">Here's my Sammy / Accordion code</a>, to demonstrate how simple it is to implement.</p>
+
+<h2>jQuery Cycle</h2>
+
+<p><a href="http://playground.joecorcoran.co.uk/sammy/cycle/" title="Sammy / Cycle example">http://playground.joecorcoran.co.uk/sammy/cycle/</a></p>
+
+<p>Another way in which Javascript is used quite frequently is to present slideshows. Again, we could be using Sammy to provide direct access to a slide that would usually be buried in the cycle:</p>
+
+<p><a href="http://playground.joecorcoran.co.uk/sammy/cycle/#/slide/3" title="Sammy / Cycle example part 2">http://playground.joecorcoran.co.uk/sammy/cycle/#/slide/3</a></p>
+
+<p>This one was slightly harder to implement, but still achievable with a bit of hacking around. I couldn't get the 'previous' and 'next' options from the Cycle plugin working nicely with Sammy without screwing the transitions up, but I'm sure it's possible with more work.</p>
+
+<p><a href="http://gist.github.com/130003" title="Sammy Cycle slideshow code Gist">Here's the Sammy slideshow code</a>.</p>
+
+<h2>Friendly form wizard</h2>
+
+<p>This one is less common, but it's where my imagination took me after the first two.  It's a single page, Sammy app-powered form wizard.</p>
+
+<p><a href="http://playground.joecorcoran.co.uk/sammy/form/" title="Sammy / form wizard example">http://playground.joecorcoran.co.uk/sammy/form/</a></p>
+
+<p>The stages of the wizard are simply fieldsets hidden/shown appropriately.  There's a simple validation attempt at the end which checks for empty fields and gives helpful links back to any stage that needs to be amended.  Once all fields are filled, the submit button appears and Sammy handles the post request.  Obviously, performing more complicated validation on page would become unwieldy, but handling it with <acronym title="Asynchronous Javascript and XML">AJAX</acronym> is an option.</p>
+
+<p><a href="http://gist.github.com/134843" title="Sammy form wizard code Gist">Here's my Sammy form code</a>.</p>
+
+<p>I'm really impressed with Sammy and it's definitely changed the way I think about working with Javascript for the better.  I'd certainly recommend downloading <a href="http://github.com/quirkey/sammy/tree/master" title="Sammy on GitHub">the latest version</a> (0.2.0 at time of writing) and weaving it into some of your existing Javascript – it's a nice way to familiarise yourself with Sammy whilst adding an extra slice of accessibility to your work.</p>
+
+<h2>Update, 4 Jan 2011</h2>
+
+<p>Just thought I'd better say this, since this post is still getting a lot of traffic.  While the examples I wrote here are quite useful, Sammy itself has changed quite a lot in the meantime.  Please make sure you check the <a href="http://code.quirkey.com/sammy/docs/index.html">Sammy docs</a> before you give yourself a headache.</p>
+]]></content>
+  </entry>
+  
+</feed>

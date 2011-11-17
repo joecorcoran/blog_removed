@@ -1,0 +1,493 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>When Sammy Met Jasmine - Lapping it up with open arms</title>
+  <meta name="author" content="Joe Corcoran">
+
+  
+  <meta name="description" content="Testing Sammy JavaScript apps with Pivotal Labs&#8217; Jasmine BDD framework Aaron Quint&#8217;s route-driven JavaScript framework Sammy, ships with &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://joecorcoran.github.com/2010/09/01/when-sammy-met-jasmine">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="Lapping it up with open arms" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">Lapping it up with open arms</a></h1>
+  
+    <h2>Joe Corcoran</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:joecorcoran.github.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+<ul class="main-navigation">
+  <li><a href="/">Home</a></li>
+  <li><a href="/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">When Sammy Met Jasmine</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-09-01T21:37:00+01:00" pubdate data-updated="true">Sep 1<span>st</span>, 2010</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><h2>Testing Sammy JavaScript apps with Pivotal Labs&#8217; Jasmine BDD framework</h2>
+
+<p>Aaron Quint&#8217;s route-driven JavaScript framework <a href="http://github.com/quirkey/sammy" title="Sammy framework on GitHub">Sammy</a>, ships with <a href="http://github.com/jquery/qunit/" title="QUnit jQuery testing framework on GitHub">QUnit</a> tests. This is an obvious choice, since QUnit is jQuery&#8217;s test framework and Sammy depends on jQuery. I, however, am not the biggest fan of QUnit. It works really well, but I find the syntax a little unwieldy.  On a recent project, I thought I&#8217;d try out <a href="http://github.com/pivotal/jasmine">Jasmine – a library-independent JavaScript <acronym title="Behaviour Driven Development">BDD</acronym> framework</a> with a more readable syntax.</p>
+
+<p>In this post I&#8217;ll run through some typical Sammy scenarios and show you how I&#8217;ve written the corresponding Jasmine tests.  For reference, I&#8217;m using Jasmine 0.11.1 and Sammy 0.5.4.</p>
+
+<!--more-->
+
+
+<h2>Setting up Sammy</h2>
+
+<p>Let&#8217;s start with a fairly simple Sammy app with some common features.</p>
+
+<div><script src='https://gist.github.com/560735.js?file=app.js'></script>
+<noscript><pre><code>var app = $.sammy(function() {
+                           
+    var context = this;
+                           
+    this.get('#/', function() {
+        this.trigger('myEvent', { h1: 'My app',  text: 'world' });
+    });
+    
+    this.bind('myEvent', function(e, opts) {
+        $('h1').html(opts.h1);
+        $('p#text').html(context.url.build('hello', opts.text));
+    });
+    
+    this.url = {
+        build: function(key, val) {
+            return '#/'+key+'/'+val;
+        }
+    };
+    
+});
+
+$(function() {
+    app.run('#/');         
+});</code></pre></noscript></div>
+
+
+<p>At the top of the app, the <code>context</code> variable is assigned, providing easy and unambiguous access to the <code>Sammy.Application</code> instance itself, for use elsewhere.  A GET route is declared, which simply triggers an event named <code>myEvent</code>.  The second argument to <code>trigger</code> passes an object to the event:</p>
+
+<div><script src='https://gist.github.com/560735.js?file=app_pt1.js'></script>
+<noscript><pre><code>var context = this;
+                           
+this.get('#/', function() {
+    this.trigger('myEvent', { h1: 'My app',  text: 'world' });
+});</code></pre></noscript></div>
+
+
+<p>Here is the event that was triggered in the GET route.  Bound events accept a custom object as their second argument, which is used in this example to pass in some arbitrary values:</p>
+
+<div><script src='https://gist.github.com/560735.js?file=app_pt2.js'></script>
+<noscript><pre><code>this.bind('myEvent', function(e, opts) {
+    $('h1').html(opts.h1);
+    $('p#text').html(context.url.build('hello', opts.text));
+});</code></pre></noscript></div>
+
+
+<p>Here, a (very) rough example of a modular design pattern is established for any non-event driven parts of the app.  I like to group functions by similarity of purpose.</p>
+
+<div><script src='https://gist.github.com/560735.js?file=app_pt3.js'></script>
+<noscript><pre><code>this.url = {
+    build: function(key, val) {
+        return '#/'+key+'/'+val;
+    }
+};</code></pre></noscript></div>
+
+
+<h3>An aside: Can I read all this shit easily?</h3>
+
+<p>I&#8217;ve started to ask myself this question frequently.  If the answer is no, it&#8217;s time to abstract.</p>
+
+<p>Particularly where jQuery is involved, I often find code that looks similar to this:</p>
+
+<div><script src='https://gist.github.com/563595.js?file=chain_soup.js'></script>
+<noscript><pre><code>function DoTooMuchStuff(num) {
+    $('p#mypar_'+num).slideUp(400).remove();
+    $('h3#myheading_'+num).html('No records found');
+    context.trigger('updateStoredRecords', { remove: num });
+    var delimiter = ($('ul#removed &gt; li').size() &gt; 0) ? ', ' : '';
+    $('ul#removed').append($('&lt;li/&gt;').html(delimiter+GetName(num)));
+};
+</code></pre></noscript></div>
+
+
+<p>It only takes a few lines of jQuery, chained to the hilt, to achieve a lot.  This is seen as an advantage, and rightly so for small pieces of UI scripting, but it&#8217;s a huge pain when testing larger applications since it leads to bloated specs.  Imagine trying to test the above example – a long list of calls needs a long list of assertions.  But testing needn&#8217;t be a chore!  Whichever way a JavaScript project is structured, from fully modular and enclosed to fly-open-for-everyone-to-see, keeping functions succinct and limited in purpose makes for much easier testing.  Readable code == readable tests == clear statement of intentions to leave for future developers == painless development.</p>
+
+<h2>Testing with Jasmine</h2>
+
+<p>Here&#8217;s an initial attempt at testing the above Sammy app using Jasmine.  The specs are within <code>describe</code> blocks.  These aren&#8217;t strictly necessary but nesting them helps to describe your tests in relation to the structure of your app.  See how the nesting follows the namespacing of the <code>url.build</code> function, for example:</p>
+
+<div><script src='https://gist.github.com/560735.js?file=appSpecWithout.js'></script>
+<noscript><pre><code>describe('myEvent', function() {
+                             
+    beforeEach(function() {
+        $('body').append('&lt;div id=&quot;jasmine&quot;&gt;&lt;h1&gt;Heading&lt;/h1&gt;&lt;p id=&quot;text&quot;&gt;Replace me&lt;/p&gt;&lt;/div&gt;');
+        opts = {
+            h1: 'My app',
+            text: 'world'
+        };
+        app.trigger('myEvent', opts);
+    });
+
+    afterEach(function() {
+        $('div#jasmine').empty().remove();
+    });
+    
+    it('should set h1', function() {
+        expect($('h1').html()).toMatch(/My app/);
+    });
+    
+    it('should show something in place of default text', function() {
+        expect($('p#text').html()).not.toMatch(/Replace me/);
+        expect($('p#text').html().length).toBeGreaterThan(0);
+    });
+    
+});
+
+describe('url', function() {
+    
+    describe('build', function() {
+        
+        it('should return properly formed hash-based url', function() {
+            var url = app.url.build('foo', 'bar');
+            expect(url).toEqual('#/foo/bar');
+        });
+        
+    });
+    
+});</code></pre></noscript></div>
+
+
+<p>Since the app involves <acronym title="Document Object Model">DOM</acronym> insertion, it&#8217;s clear that some kind of setup and teardown of temporary DOM elements is required.  Using Jasmine&#8217;s <code>beforeEach</code> method, the relevant elements are inserted into the DOM before each spec is run. Since each spec within this <code>describe</code> block refers to the same event, the event trigger is here as well, to avoid repetition.  The DOM elements are cleaned up using <code>afterEach</code>.</p>
+
+<div><script src='https://gist.github.com/560735.js?file=appSpecWithout_wrap.js'></script>
+<noscript><pre><code>beforeEach(function() {
+    $('body').append('&lt;div id=&quot;jasmine&quot;&gt;&lt;h1&gt;Heading&lt;/h1&gt;&lt;p id=&quot;text&quot;&gt;Replace me&lt;/p&gt;&lt;/div&gt;');
+    opts = {
+        h1: 'My app',
+        text: 'world'
+    };
+    app.trigger('myEvent', opts);
+});
+
+afterEach(function() {
+    $('div#jasmine').empty().remove();
+});</code></pre></noscript></div>
+
+
+<p>Specs are enclosed in the <code>it</code> blocks and assertions/expectations are made using <code>expect</code>.  The syntax, when read out loud, sounds pretty close to how I&#8217;d describe my tests.  &#8220;It <em>should etc.</em>&#8221;; &#8220;Expect <em>actual</em> to match <em>expression</em>&#8221;.  <a href="http://pivotal.github.com/jasmine/jsdoc/symbols/jasmine.Matchers.html">Jasmine has various matcher methods</a> such as <code>toMatch</code>.</p>
+
+<div><script src='https://gist.github.com/560735.js?file=appSpecWithout_spec1.js'></script>
+<noscript><pre><code>it('should set h1', function() {
+    expect($('h1').html()).toMatch(/My app/);
+});</code></pre></noscript></div>
+
+
+<h3>Befriending the DOM</h3>
+
+<p>There&#8217;s something a little clunky about certain aspects of the above tests.  In particular the DOM-related areas look a little hacky.  It would be unfair to call this a fault of the testing framework – DOM manipulation isn&#8217;t even on the Jasmine agenda.  So this is where <a href="http://github.com/velesin/jasmine-jquery">velesin&#8217;s jasmine-jquery extensions</a> step in.</p>
+
+<p>jasmine-jquery allows for various improvements on the original tests:</p>
+
+<div><script src='https://gist.github.com/560735.js?file=appSpec.js'></script>
+<noscript><pre><code>describe('myEvent', function() {
+                             
+    beforeEach(function() {
+        loadFixtures('fixtures/test.html');
+        opts = {
+            h1: 'My app',
+            text: 'world'
+        };
+        app.trigger('myEvent', opts);
+    });
+    
+    it('should set h1', function() {
+        expect($('h1')).toHaveText(opts.h1);
+    });
+    
+    it('should show something in place of default text', function() {
+        expect($('p#text')).not.toHaveText('Replace me');
+        expect($('p#text')).not.toBeEmpty();
+    });
+    
+});
+
+describe('url', function() {
+    
+    describe('build', function() {
+        
+        it('should return properly formed hash-based url', function() {
+            var url = app.url.build('foo', 'bar');
+            expect(url).toEqual('#/foo/bar');
+        });
+        
+    });
+    
+});</code></pre></noscript></div>
+
+
+<p>Firstly, the manual setup and teardown is no longer required, thanks to <code>loadFixtures</code>, which loads in the necessary DOM elements from an external file, inserts them into a wrapper div inside the document body, and cleans up automatically after each spec is run.  Big win.  People who are really smart might even try to load fixtures in from the same files as partials to avoid duplication (I have a feeling this could all come together beautifully with <a href="http://code.quirkey.com/sammy/docs/api.html#Sammy.Meld">Sammy&#8217;s new Meld feature</a>…).  An alternative is to use <code>setFixtures</code>, which accepts either an HTML string or a jQuery element as its only argument rather than loading from an external file.</p>
+
+<div><script src='https://gist.github.com/560735.js?file=appSpec_fixture.js'></script>
+<noscript><pre><code>beforeEach(function() {
+    loadFixtures('fixtures/test.html');
+    opts = {
+        h1: 'My app',
+        text: 'world'
+    };
+    app.trigger('myEvent', opts);
+});</code></pre></noscript></div>
+
+
+<p>jasmine-jquery also provides a set of <a href="http://github.com/velesin/jasmine-jquery#readme">custom matchers</a>.  Here, for example, there&#8217;s no need for the workaround of checking the innerHtml of an element against a regular expression, when <code>toHaveText</code> does the trick.</p>
+
+<div><script src='https://gist.github.com/560735.js?file=appSpec_matchers.js'></script>
+<noscript><pre><code>it('should set h1', function() {
+    expect($('h1')).toHaveText(opts.h1);
+});
+    
+it('should show something in place of default text', function() {
+    expect($('p#text')).not.toHaveText('Replace me');
+    expect($('p#text')).not.toBeEmpty();
+});</code></pre></noscript></div>
+
+
+<h2>Conclusions</h2>
+
+<p>The Jasmine documentation could really do with a spruce up – especially in the less immediately obvious areas like spying, mocking and stubbing.  It&#8217;s possible to bundle through and get some pretty nifty async tests running (blog post on this topic pending) but clearer instructions would be a big help.  I&#8217;m sure better docs are in the pipeline with version 1.0.0 proper due to be released soon.</p>
+
+<p>I find testing with Jasmine a more pleasant experience than any I&#8217;ve had with another JavaScript testing framework.  The only thing that has come close for me is <a href="http://visionmedia.github.com/jspec/" title="JSpec testing framework on GitHub">JSpec</a>, which has very similar syntax to Jasmine if you eschew the custom Rubyesque grammar.</p>
+
+<p>Provided you structure your Sammy application in a sensible way, it&#8217;s easily testable with Jasmine.  I&#8217;d like a way of testing the Sammy routes themselves, something akin to functional testing as apposed to unit testing.  But I&#8217;m happy enough with relying on the Sammy internal tests and keeping the routes as simple trigger calls.</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Joe Corcoran</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-09-01T21:37:00+01:00" pubdate data-updated="true">Sep 1<span>st</span>, 2010</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/categories/bdd/'>bdd</a>, <a class='category' href='/categories/jasmine/'>jasmine</a>, <a class='category' href='/categories/javascript/'>javascript</a>, <a class='category' href='/categories/jquery/'>jquery</a>, <a class='category' href='/categories/sammy/'>sammy</a>, <a class='category' href='/categories/testing/'>testing</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://joecorcoran.github.com/2010/09/01/when-sammy-met-jasmine" data-via="josephcorcoran" data-counturl="http://joecorcoran.github.com/2010/09/01/when-sammy-met-jasmine" >Tweet</a>
+  
+  
+  <div class="g-plusone" data-size="medium"></div>
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/2010/02/01/announcing-tweet-fighter" title="Previous Post: Announcing Tweet Fighter">&laquo; Announcing Tweet Fighter</a>
+      
+      
+        <a class="basic-alignment right" href="/2010/11/12/testing-bound-jquery-events" title="next Post: Testing bound jQuery events">Testing bound jQuery events &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>About me</h1>
+  <p>I'm a computer guy who does internet stuff. I work at <a href="http://tribesports.com">Tribesports</a> and make things with Ruby, JavaScript, CSS4 and HTML7. It all sounds a bit intangible when you compare it to a nurse or the guy who makes your sandwiches at Pret or something.</p>
+</section><section>
+  <h1>Recent posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/2011/11/15/judge-simple-javascript-form-validation-for-rails">Judge: Simple JavaScript form validation for Rails</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2010/11/12/testing-bound-jquery-events">Testing bound jQuery events</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2010/09/01/when-sammy-met-jasmine">When Sammy Met Jasmine</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2010/02/01/announcing-tweet-fighter">Announcing Tweet Fighter</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2009/07/02/practical-uses-for-sammy">Practical uses for Sammy</a>
+      </li>
+    
+  </ul>
+</section>
+<section>
+  <h1>Projects</h1>
+  <ul>
+    <li><a href="http://joecorcoran.github.com/judge">Judge</a> &raquo; A RubyGem for simple client side form validation in Rails 3</li>
+    <li><a href="http://tweetfight.me">Tweet Fighter</a> &raquo; Shoryuken your enemies by being a bit sweary and mean on Twitter</li>
+    <li><a href="http://github.com/joecorcoran/cities">Cities</a> &raquo; A RubyGem providing city data from the MaxMind world cities database</li>
+  </ul>
+</section>
+<section>
+  <h1>Latest tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating...</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("josephcorcoran", 5, false);
+    });
+  </script>
+  <script src="/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/josephcorcoran" class="twitter-follow-button" data-width="208px" data-show-count="false">Follow @josephcorcoran</a>
+  
+</section>
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2011 - Joe Corcoran -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

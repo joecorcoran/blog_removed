@@ -1,0 +1,309 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Practical uses for Sammy - Lapping it up with open arms</title>
+  <meta name="author" content="Joe Corcoran">
+
+  
+  <meta name="description" content="I&#8217;ve recently been looking into a new Javascript framework named Sammy, written by the most excellent Aaron Quint. It was built on top of &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://joecorcoran.github.com/2009/07/02/practical-uses-for-sammy">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="Lapping it up with open arms" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">Lapping it up with open arms</a></h1>
+  
+    <h2>Joe Corcoran</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:joecorcoran.github.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+<ul class="main-navigation">
+  <li><a href="/">Home</a></li>
+  <li><a href="/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Practical Uses for Sammy</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-07-02T21:52:00+01:00" pubdate data-updated="true">Jul 2<span>nd</span>, 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>I&#8217;ve recently been looking into a new Javascript framework named <a href="http://code.quirkey.com/sammy/" title="Sammy homepage at Quirkey.com">Sammy</a>, written by the most excellent <a href="http://www.quirkey.com/blog/" title="Aaron Quint's blog">Aaron Quint</a>.  It was built on top of <a href="http://jquery.com/" title="jQuery site">jQuery</a> and intended to allow developers to build one-page applications, utilising the <acronym title="Uniform Resource Locator">URL</acronym> hash (the portion of the <acronym title="Uniform Resource Locator">URL</acronym> from the # symbol onwards) usually reserved for on-page anchors to give Javascript functions lovely descriptive routes.</p>
+
+<p>I&#8217;m looking forward to writing applications in this way (and I&#8217;m trying to think of an excuse to do so), but what Sammy also kindly allows is direct, linkable access to the inner workings of some of the more usual Javascript implementations too.</p>
+
+<p>I&#8217;ve put a few examples together to demonstrate.</p>
+
+<!--more-->
+
+
+<h2>jQuery Accordion</h2>
+
+<p>Pretty much every developer out there who deals with the front-end will have come across collapsing accordion-style lists.  They&#8217;re in wide use nowadays as they make pages with lots of text look a lot friendlier (for example <acronym title="Frequently Asked Questions">FAQ</acronym> pages).  Also, people like seeing stuff move around.</p>
+
+<p>But what if you wanted to retain the accordion effect, whilst providing users/clients with direct links to the page with a particular list item expanded?</p>
+
+<p><a href="http://playground.joecorcoran.co.uk/sammy/accordion/" title="Sammy / Accordion example">http://playground.joecorcoran.co.uk/sammy/accordion/</a></p>
+
+<p>Click around and notice that the <acronym title="Uniform Resource Locator">URL</acronym> in the address bar is changing. If you copy one of the new <acronym title="Uniform Resource Locator">URL</acronym>s, like</p>
+
+<p><a href="http://playground.joecorcoran.co.uk/sammy/accordion/#/section/3" title="Sammy / Accordion example link straight to expanded section">http://playground.joecorcoran.co.uk/sammy/accordion/#/section/3</a></p>
+
+<p>into a new window, you&#8217;ll be taken to the same page with the 3rd section expanded.</p>
+
+<p><a href="http://gist.github.com/128728" title="Sammy Accordion code Gist">Here&#8217;s my Sammy / Accordion code</a>, to demonstrate how simple it is to implement.</p>
+
+<h2>jQuery Cycle</h2>
+
+<p><a href="http://playground.joecorcoran.co.uk/sammy/cycle/" title="Sammy / Cycle example">http://playground.joecorcoran.co.uk/sammy/cycle/</a></p>
+
+<p>Another way in which Javascript is used quite frequently is to present slideshows. Again, we could be using Sammy to provide direct access to a slide that would usually be buried in the cycle:</p>
+
+<p><a href="http://playground.joecorcoran.co.uk/sammy/cycle/#/slide/3" title="Sammy / Cycle example part 2">http://playground.joecorcoran.co.uk/sammy/cycle/#/slide/3</a></p>
+
+<p>This one was slightly harder to implement, but still achievable with a bit of hacking around. I couldn&#8217;t get the &#8216;previous&#8217; and &#8216;next&#8217; options from the Cycle plugin working nicely with Sammy without screwing the transitions up, but I&#8217;m sure it&#8217;s possible with more work.</p>
+
+<p><a href="http://gist.github.com/130003" title="Sammy Cycle slideshow code Gist">Here&#8217;s the Sammy slideshow code</a>.</p>
+
+<h2>Friendly form wizard</h2>
+
+<p>This one is less common, but it&#8217;s where my imagination took me after the first two.  It&#8217;s a single page, Sammy app-powered form wizard.</p>
+
+<p><a href="http://playground.joecorcoran.co.uk/sammy/form/" title="Sammy / form wizard example">http://playground.joecorcoran.co.uk/sammy/form/</a></p>
+
+<p>The stages of the wizard are simply fieldsets hidden/shown appropriately.  There&#8217;s a simple validation attempt at the end which checks for empty fields and gives helpful links back to any stage that needs to be amended.  Once all fields are filled, the submit button appears and Sammy handles the post request.  Obviously, performing more complicated validation on page would become unwieldy, but handling it with <acronym title="Asynchronous Javascript and XML">AJAX</acronym> is an option.</p>
+
+<p><a href="http://gist.github.com/134843" title="Sammy form wizard code Gist">Here&#8217;s my Sammy form code</a>.</p>
+
+<p>I&#8217;m really impressed with Sammy and it&#8217;s definitely changed the way I think about working with Javascript for the better.  I&#8217;d certainly recommend downloading <a href="http://github.com/quirkey/sammy/tree/master" title="Sammy on GitHub">the latest version</a> (0.2.0 at time of writing) and weaving it into some of your existing Javascript – it&#8217;s a nice way to familiarise yourself with Sammy whilst adding an extra slice of accessibility to your work.</p>
+
+<h2>Update, 4 Jan 2011</h2>
+
+<p>Just thought I&#8217;d better say this, since this post is still getting a lot of traffic.  While the examples I wrote here are quite useful, Sammy itself has changed quite a lot in the meantime.  Please make sure you check the <a href="http://code.quirkey.com/sammy/docs/index.html">Sammy docs</a> before you give yourself a headache.</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Joe Corcoran</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-07-02T21:52:00+01:00" pubdate data-updated="true">Jul 2<span>nd</span>, 2009</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/categories/accordion/'>accordion</a>, <a class='category' href='/categories/cycle/'>cycle</a>, <a class='category' href='/categories/javascript/'>javascript</a>, <a class='category' href='/categories/jquery/'>jquery</a>, <a class='category' href='/categories/rest/'>rest</a>, <a class='category' href='/categories/sammy/'>sammy</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://joecorcoran.github.com/2009/07/02/practical-uses-for-sammy" data-via="josephcorcoran" data-counturl="http://joecorcoran.github.com/2009/07/02/practical-uses-for-sammy" >Tweet</a>
+  
+  
+  <div class="g-plusone" data-size="medium"></div>
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
+</div>
+
+    
+    <p class="meta">
+      
+      
+        <a class="basic-alignment right" href="/2010/02/01/announcing-tweet-fighter" title="next Post: Announcing Tweet Fighter">Announcing Tweet Fighter &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>About me</h1>
+  <p>I'm a computer guy who does internet stuff. I work at <a href="http://tribesports.com">Tribesports</a> and make things with Ruby, JavaScript, CSS4 and HTML7. It all sounds a bit intangible when you compare it to a nurse or the guy who makes your sandwiches at Pret or something.</p>
+</section><section>
+  <h1>Recent posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/2011/11/15/judge-simple-javascript-form-validation-for-rails">Judge: Simple JavaScript form validation for Rails</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2010/11/12/testing-bound-jquery-events">Testing bound jQuery events</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2010/09/01/when-sammy-met-jasmine">When Sammy Met Jasmine</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2010/02/01/announcing-tweet-fighter">Announcing Tweet Fighter</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2009/07/02/practical-uses-for-sammy">Practical uses for Sammy</a>
+      </li>
+    
+  </ul>
+</section>
+<section>
+  <h1>Projects</h1>
+  <ul>
+    <li><a href="http://joecorcoran.github.com/judge">Judge</a> &raquo; A RubyGem for simple client side form validation in Rails 3</li>
+    <li><a href="http://tweetfight.me">Tweet Fighter</a> &raquo; Shoryuken your enemies by being a bit sweary and mean on Twitter</li>
+    <li><a href="http://github.com/joecorcoran/cities">Cities</a> &raquo; A RubyGem providing city data from the MaxMind world cities database</li>
+  </ul>
+</section>
+<section>
+  <h1>Latest tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating...</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("josephcorcoran", 5, false);
+    });
+  </script>
+  <script src="/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/josephcorcoran" class="twitter-follow-button" data-width="208px" data-show-count="false">Follow @josephcorcoran</a>
+  
+</section>
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2011 - Joe Corcoran -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

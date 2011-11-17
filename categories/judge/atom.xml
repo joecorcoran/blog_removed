@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: judge | Lapping it up with open arms]]></title>
+  <link href="http://joecorcoran.github.com/categories/judge/atom.xml" rel="self"/>
+  <link href="http://joecorcoran.github.com/"/>
+  <updated>2011-11-17T23:41:11+00:00</updated>
+  <id>http://joecorcoran.github.com/</id>
+  <author>
+    <name><![CDATA[Joe Corcoran]]></name>
+    <email><![CDATA[joecorcoran@gmail.com]]></email>
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Judge: Simple JavaScript form validation for Rails]]></title>
+    <link href="http://joecorcoran.github.com/2011/11/15/judge-simple-javascript-form-validation-for-rails"/>
+    <updated>2011-11-15T13:17:00+00:00</updated>
+    <id>http://joecorcoran.github.com/2011/11/15/judge-simple-javascript-form-validation-for-rails</id>
+    <content type="html"><![CDATA[<p>Since version 1.0 has just been released and I've settled on what I hope is a friendly interface, I thought it was probably time I wrote a bit about <a href="https://rubygems.org/gems/judge">Judge</a>, my client side form validation gem for Rails 3.</p>
+
+<!--more-->
+
+
+<h2>Context</h2>
+
+<p>There are some other gems out there that attempt to solve this problem, so it would be remiss of me not to mention them. <a href="https://github.com/bcardarella/client_side_validations" title="Client Side Validations gem by Brian Cardarella">Client Side Validations</a> is feature-rich and does a lot of work for you.  There's also <a href="https://github.com/alechill/livevalidation" title="LiveValidation by Alec Hill">LiveValidation</a>, which has been around for a long time and might be a good choice for people with legacy Rails apps that need Prototype.</p>
+
+<p>I wanted a solution that was as small as possible. This is a simple job – no need for middleware, no need for extensions to core Ruby classes.  I also wanted it to be as flexible as possible - no assumptions should be made about form markup, styles, classes and so on. I started hacking away, using the jQuery plugin pattern as a starting point for the client side code. It soon became clear that jQuery had to go. Writing Judge as a jQuery plugin was a mistake – the code I wrote ended up tightly coupled to specific event bindings, specific DOM elements etc. That kind of stuff should really be left for the user to decide.</p>
+
+<h2>Examples</h2>
+
+<h3>Setup</h3>
+
+<p>Add validation to an attribute in your model.</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>app/models/thing.rb  </span></figcaption>
+ <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">Thing</span> <span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span> <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Base</span>
+</span><span class='line'>  <span class="n">validates</span> <span class="ss">:name</span><span class="p">,</span> <span class="ss">:presence</span> <span class="o">=&gt;</span> <span class="kp">true</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>Use the <code>Judge::FormBuilder</code> in your view. Add <code>:validate => true</code> to the options hash of any form element that you wish to validate on the client side.</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>app/views/things/new.html.erb  </span></figcaption>
+ <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="sx">%= form_for(@thing, :builder =</span><span class="o">&gt;</span> <span class="no">Judge</span><span class="o">::</span><span class="no">FormBuilder</span><span class="p">)</span> <span class="k">do</span> <span class="o">|</span><span class="n">f</span><span class="o">|</span> <span class="sx">%&gt;</span>
+</span><span class='line'><span class="sx">  &amp;lt;%= f.text_field :name, :validate =&gt;</span> <span class="kp">true</span> <span class="sx">%&gt;</span>
+</span><span class='line'><span class="sx">&amp;lt;% end %&gt;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<h3>Quick validation</h3>
+
+<p>The <code>judge</code> object has a static <code>validate</code> method for immediate validation:</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">judge</span><span class="p">.</span><span class="nx">validate</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">&#39;thing_name&#39;</span><span class="p">));</span>
+</span><span class='line'>  <span class="c1">// =&gt; { valid: false, element: HTMLInputElement..., messages: { blank: &quot;Can&#39;t be blank&quot; } }</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>The same method used within a <code>keyup</code> event handler (requires jQuery):</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">$</span><span class="p">(</span><span class="s1">&#39;input#thing_name&#39;</span><span class="p">).</span><span class="nx">keyup</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>  <span class="kd">var</span> <span class="nx">input</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
+</span><span class='line'>  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">judge</span><span class="p">.</span><span class="nx">validate</span><span class="p">(</span><span class="nx">input</span><span class="p">));</span>
+</span><span class='line'><span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>Note that we are not passing a jQuery object into the <code>validate</code> method here, but the DOM element itself. The <a href="http://api.jquery.com/get/">jQuery <strong>get</strong> method</a> will often be of use when validating elements that have been wrapped by jQuery.</p>
+
+<h3>Validation with watchers</h3>
+
+<p>Most of the features of Judge are based around watchers &#8211; JavaScript objects that hold information about the form elements to which they point.</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="c1">// instantiate watcher</span>
+</span><span class='line'><span class="kd">var</span> <span class="nx">nameInput</span>   <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">&#39;thing_name&#39;</span><span class="p">),</span><span class="o">&lt;</span><span class="err">/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nx">pre</span><span class="o">&gt;&lt;</span><span class="nx">code</span><span class="o">&gt;</span><span class="nx">nameWatcher</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">judge</span><span class="p">.</span><span class="nx">Watcher</span><span class="p">(</span><span class="nx">nameInput</span><span class="p">);</span>
+</span><span class='line'><span class="o">&lt;</span><span class="err">/code&gt;&lt;/pre&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nx">p</span><span class="o">&gt;</span><span class="c1">// some time later:</span>
+</span><span class='line'><span class="nx">nameWatcher</span><span class="p">.</span><span class="nx">validate</span><span class="p">();</span>
+</span><span class='line'>  <span class="c1">// =&gt; { valid: false, element: HTMLInputElement..., messages: { blank: &quot;Can&#39;t be blank&quot; } }</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<h3>Validating stored elements</h3>
+
+<p>Most of the time, validating immediately on <code>keyup</code> or <code>change</code> will be enough to achieve the intended user experience.  But there are times when storing a reference to a form element, or a group of form elements, can be useful. For example, validating elements conditionally based on user triggers. This is where the Judge <code>store</code> comes in.</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="c1">// store some text input elements</span>
+</span><span class='line'><span class="kd">var</span> <span class="nx">textInputs</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">querySelectorAll</span><span class="p">(</span><span class="s1">&#39;form.thing-form input[type=text]&#39;</span><span class="p">);</span>
+</span><span class='line'><span class="nx">judge</span><span class="p">.</span><span class="nx">store</span><span class="p">.</span><span class="nx">save</span><span class="p">(</span><span class="s1">&#39;foo&#39;</span><span class="p">,</span> <span class="nx">textInputs</span><span class="p">);</span><span class="o">&lt;</span><span class="err">/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nx">p</span><span class="o">&gt;</span><span class="c1">// retrieve watchers for your stored elements</span>
+</span><span class='line'><span class="nx">judge</span><span class="p">.</span><span class="nx">store</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;foo&#39;</span><span class="p">);</span>
+</span><span class='line'>  <span class="c1">// =&gt; [ { element: HTMLInputElement... }, { element: HTMLInputElement... }, ... ]&lt;/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nx">p</span><span class="o">&gt;</span><span class="c1">// retrieve your stored elements</span>
+</span><span class='line'><span class="nx">judge</span><span class="p">.</span><span class="nx">store</span><span class="p">.</span><span class="nx">getDOM</span><span class="p">(</span><span class="s1">&#39;foo&#39;</span><span class="p">);</span>
+</span><span class='line'>  <span class="c1">// =&gt; [ HTMLInputElement, HTMLInputElement, ... ]&lt;/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nx">p</span><span class="o">&gt;</span><span class="c1">// validate all elements stored against key &#39;foo&#39;</span>
+</span><span class='line'><span class="nx">judge</span><span class="p">.</span><span class="nx">store</span><span class="p">.</span><span class="nx">validate</span><span class="p">(</span><span class="s1">&#39;foo&#39;</span><span class="p">);</span>
+</span><span class='line'>  <span class="c1">// =&gt; [ { valid: true, ... }, { valid: false, ... }, ... ]</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<h2>Use it</h2>
+
+<p>Go ahead! Feedback is all kinds of welcome.</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>Gemfile </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>gem "judge", "~> 1.0.0"</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<ul>
+<li><a href="https://rubygems.org/gems/judge">Judge on RubyGems.org</a></li>
+<li><a href="http://joecorcoran.github.com/judge">Judge documentation</a></li>
+<li><a href="http://github.com/joecorcoran/judge">Judge source on GitHub</a></li>
+</ul>
+
+]]></content>
+  </entry>
+  
+</feed>

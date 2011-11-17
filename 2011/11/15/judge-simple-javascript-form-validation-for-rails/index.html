@@ -1,0 +1,395 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Judge: Simple JavaScript form validation for Rails - Lapping it up with open arms</title>
+  <meta name="author" content="Joe Corcoran">
+
+  
+  <meta name="description" content="Since version 1.0 has just been released and I&#8217;ve settled on what I hope is a friendly interface, I thought it was probably time I wrote a bit &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://joecorcoran.github.com/2011/11/15/judge-simple-javascript-form-validation-for-rails">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="Lapping it up with open arms" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">Lapping it up with open arms</a></h1>
+  
+    <h2>Joe Corcoran</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:joecorcoran.github.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+<ul class="main-navigation">
+  <li><a href="/">Home</a></li>
+  <li><a href="/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Judge: Simple JavaScript Form Validation for Rails</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-11-15T13:17:00+00:00" pubdate data-updated="true">Nov 15<span>th</span>, 2011</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>Since version 1.0 has just been released and I&#8217;ve settled on what I hope is a friendly interface, I thought it was probably time I wrote a bit about <a href="https://rubygems.org/gems/judge">Judge</a>, my client side form validation gem for Rails 3.</p>
+
+<!--more-->
+
+
+<h2>Context</h2>
+
+<p>There are some other gems out there that attempt to solve this problem, so it would be remiss of me not to mention them. <a href="https://github.com/bcardarella/client_side_validations" title="Client Side Validations gem by Brian Cardarella">Client Side Validations</a> is feature-rich and does a lot of work for you.  There&#8217;s also <a href="https://github.com/alechill/livevalidation" title="LiveValidation by Alec Hill">LiveValidation</a>, which has been around for a long time and might be a good choice for people with legacy Rails apps that need Prototype.</p>
+
+<p>I wanted a solution that was as small as possible. This is a simple job – no need for middleware, no need for extensions to core Ruby classes.  I also wanted it to be as flexible as possible - no assumptions should be made about form markup, styles, classes and so on. I started hacking away, using the jQuery plugin pattern as a starting point for the client side code. It soon became clear that jQuery had to go. Writing Judge as a jQuery plugin was a mistake – the code I wrote ended up tightly coupled to specific event bindings, specific DOM elements etc. That kind of stuff should really be left for the user to decide.</p>
+
+<h2>Examples</h2>
+
+<h3>Setup</h3>
+
+<p>Add validation to an attribute in your model.</p>
+
+<figure class='code'><figcaption><span>app/models/thing.rb  </span></figcaption>
+ <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">Thing</span> <span class="o">&lt;</span> <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Base</span>
+</span><span class='line'>  <span class="n">validates</span> <span class="ss">:name</span><span class="p">,</span> <span class="ss">:presence</span> <span class="o">=&gt;</span> <span class="kp">true</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Use the <code>Judge::FormBuilder</code> in your view. Add <code>:validate => true</code> to the options hash of any form element that you wish to validate on the client side.</p>
+
+<figure class='code'><figcaption><span>app/views/things/new.html.erb  </span></figcaption>
+ <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="o">&lt;</span><span class="sx">%= form_for(@thing, :builder =</span><span class="o">&gt;</span> <span class="no">Judge</span><span class="o">::</span><span class="no">FormBuilder</span><span class="p">)</span> <span class="k">do</span> <span class="o">|</span><span class="n">f</span><span class="o">|</span> <span class="sx">%&gt;</span>
+</span><span class='line'><span class="sx">  &lt;%= f.text_field :name, :validate =&gt;</span> <span class="kp">true</span> <span class="sx">%&gt;</span>
+</span><span class='line'><span class="sx">&lt;% end %&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Quick validation</h3>
+
+<p>The <code>judge</code> object has a static <code>validate</code> method for immediate validation:</p>
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">judge</span><span class="p">.</span><span class="nx">validate</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">&#39;thing_name&#39;</span><span class="p">));</span>
+</span><span class='line'>  <span class="c1">// =&gt; { valid: false, element: HTMLInputElement..., messages: { blank: &quot;Can&#39;t be blank&quot; } }</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The same method used within a <code>keyup</code> event handler (requires jQuery):</p>
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">$</span><span class="p">(</span><span class="s1">&#39;input#thing_name&#39;</span><span class="p">).</span><span class="nx">keyup</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>  <span class="kd">var</span> <span class="nx">input</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
+</span><span class='line'>  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">judge</span><span class="p">.</span><span class="nx">validate</span><span class="p">(</span><span class="nx">input</span><span class="p">));</span>
+</span><span class='line'><span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Note that we are not passing a jQuery object into the <code>validate</code> method here, but the DOM element itself. The <a href="http://api.jquery.com/get/">jQuery <strong>get</strong> method</a> will often be of use when validating elements that have been wrapped by jQuery.</p>
+
+<h3>Validation with watchers</h3>
+
+<p>Most of the features of Judge are based around watchers &#8211; JavaScript objects that hold information about the form elements to which they point.</p>
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="c1">// instantiate watcher</span>
+</span><span class='line'><span class="kd">var</span> <span class="nx">nameInput</span>   <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">&#39;thing_name&#39;</span><span class="p">),</span>
+</span><span class='line'>    <span class="nx">nameWatcher</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">judge</span><span class="p">.</span><span class="nx">Watcher</span><span class="p">(</span><span class="nx">nameInput</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">// some time later:</span>
+</span><span class='line'><span class="nx">nameWatcher</span><span class="p">.</span><span class="nx">validate</span><span class="p">();</span>
+</span><span class='line'>  <span class="c1">// =&gt; { valid: false, element: HTMLInputElement..., messages: { blank: &quot;Can&#39;t be blank&quot; } }</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Validating stored elements</h3>
+
+<p>Most of the time, validating immediately on <code>keyup</code> or <code>change</code> will be enough to achieve the intended user experience.  But there are times when storing a reference to a form element, or a group of form elements, can be useful. For example, validating elements conditionally based on user triggers. This is where the Judge <code>store</code> comes in.</p>
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="c1">// store some text input elements</span>
+</span><span class='line'><span class="kd">var</span> <span class="nx">textInputs</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">querySelectorAll</span><span class="p">(</span><span class="s1">&#39;form.thing-form input[type=text]&#39;</span><span class="p">);</span>
+</span><span class='line'><span class="nx">judge</span><span class="p">.</span><span class="nx">store</span><span class="p">.</span><span class="nx">save</span><span class="p">(</span><span class="s1">&#39;foo&#39;</span><span class="p">,</span> <span class="nx">textInputs</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">// retrieve watchers for your stored elements</span>
+</span><span class='line'><span class="nx">judge</span><span class="p">.</span><span class="nx">store</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;foo&#39;</span><span class="p">);</span>
+</span><span class='line'>  <span class="c1">// =&gt; [ { element: HTMLInputElement... }, { element: HTMLInputElement... }, ... ]</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">// retrieve your stored elements</span>
+</span><span class='line'><span class="nx">judge</span><span class="p">.</span><span class="nx">store</span><span class="p">.</span><span class="nx">getDOM</span><span class="p">(</span><span class="s1">&#39;foo&#39;</span><span class="p">);</span>
+</span><span class='line'>  <span class="c1">// =&gt; [ HTMLInputElement, HTMLInputElement, ... ]</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">// validate all elements stored against key &#39;foo&#39;</span>
+</span><span class='line'><span class="nx">judge</span><span class="p">.</span><span class="nx">store</span><span class="p">.</span><span class="nx">validate</span><span class="p">(</span><span class="s1">&#39;foo&#39;</span><span class="p">);</span>
+</span><span class='line'>  <span class="c1">// =&gt; [ { valid: true, ... }, { valid: false, ... }, ... ]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Use it</h2>
+
+<p>Go ahead! Feedback is all kinds of welcome.</p>
+
+<figure class='code'><figcaption><span>Gemfile </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>gem "judge", "~> 1.0.0"</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li><a href="https://rubygems.org/gems/judge">Judge on RubyGems.org</a></li>
+<li><a href="http://joecorcoran.github.com/judge">Judge documentation</a></li>
+<li><a href="http://github.com/joecorcoran/judge">Judge source on GitHub</a></li>
+</ul>
+
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Joe Corcoran</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-11-15T13:17:00+00:00" pubdate data-updated="true">Nov 15<span>th</span>, 2011</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/categories/active-record/'>active_record</a>, <a class='category' href='/categories/javascript/'>javascript</a>, <a class='category' href='/categories/judge/'>judge</a>, <a class='category' href='/categories/rails/'>rails</a>, <a class='category' href='/categories/ruby/'>ruby</a>, <a class='category' href='/categories/validation/'>validation</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://joecorcoran.github.com/2011/11/15/judge-simple-javascript-form-validation-for-rails" data-via="josephcorcoran" data-counturl="http://joecorcoran.github.com/2011/11/15/judge-simple-javascript-form-validation-for-rails" >Tweet</a>
+  
+  
+  <div class="g-plusone" data-size="medium"></div>
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/2010/11/12/testing-bound-jquery-events" title="Previous Post: Testing bound jQuery events">&laquo; Testing bound jQuery events</a>
+      
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>About me</h1>
+  <p>I'm a computer guy who does internet stuff. I work at <a href="http://tribesports.com">Tribesports</a> and make things with Ruby, JavaScript, CSS4 and HTML7. It all sounds a bit intangible when you compare it to a nurse or the guy who makes your sandwiches at Pret or something.</p>
+</section><section>
+  <h1>Recent posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/2011/11/15/judge-simple-javascript-form-validation-for-rails">Judge: Simple JavaScript form validation for Rails</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2010/11/12/testing-bound-jquery-events">Testing bound jQuery events</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2010/09/01/when-sammy-met-jasmine">When Sammy Met Jasmine</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2010/02/01/announcing-tweet-fighter">Announcing Tweet Fighter</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2009/07/02/practical-uses-for-sammy">Practical uses for Sammy</a>
+      </li>
+    
+  </ul>
+</section>
+<section>
+  <h1>Projects</h1>
+  <ul>
+    <li><a href="http://joecorcoran.github.com/judge">Judge</a> &raquo; A RubyGem for simple client side form validation in Rails 3</li>
+    <li><a href="http://tweetfight.me">Tweet Fighter</a> &raquo; Shoryuken your enemies by being a bit sweary and mean on Twitter</li>
+    <li><a href="http://github.com/joecorcoran/cities">Cities</a> &raquo; A RubyGem providing city data from the MaxMind world cities database</li>
+  </ul>
+</section>
+<section>
+  <h1>Latest tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating...</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("josephcorcoran", 5, false);
+    });
+  </script>
+  <script src="/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/josephcorcoran" class="twitter-follow-button" data-width="208px" data-show-count="false">Follow @josephcorcoran</a>
+  
+</section>
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2011 - Joe Corcoran -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>
