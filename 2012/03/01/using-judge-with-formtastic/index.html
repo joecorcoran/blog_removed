@@ -5,11 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Category: sinatra - Lapping it up with open arms</title>
+  <title>Using Judge with Formtastic - Lapping it up with open arms</title>
   <meta name="author" content="Joe Corcoran">
 
   
-  <meta name="description" content="Category: sinatra">
+  <meta name="description" content="There&#8217;s now an extension gem to help you use Judge for client-side validation from within your Formtastic forms. One of the modi operandi of &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://joecorcoran.github.comcategories/sinatra">
+  <link rel="canonical" href="http://joecorcoran.github.com/2012/03/01/using-judge-with-formtastic">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <script src="/javascripts/modernizr-2.0.js"></script>
@@ -73,36 +73,133 @@
   <div id="main">
     <div id="content">
       <div>
-<article role="article">
+<article class="hentry" role="article">
   
   <header>
-    <h1 class="entry-title">Category: Sinatra</h1>
+    
+      <h1 class="entry-title">Using Judge With Formtastic</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-03-01T08:31:00+00:00" pubdate data-updated="true">Mar 1<span>st</span>, 2012</time>
+        
+      </p>
     
   </header>
-  
-  <div id="blog-archives" class="category">
 
 
+<div class="entry-content"><p>There&#8217;s now an extension gem to help you use Judge for client-side validation from within your Formtastic forms.</p>
 
-  
-  <h2>2010</h2>
-
-<article>
-  
-<h1><a href="/2010/02/01/announcing-tweet-fighter">Announcing Tweet Fighter</a></h1>
-<time datetime="2010-02-01T21:46:00+00:00" pubdate><span class='month'>Feb</span> <span class='day'>01</span> <span class='year'>2010</span></time>
-
-<footer>
-  <span class="categories">posted in <a class='category' href='/categories/projects/'>projects</a>, <a class='category' href='/categories/ruby/'>ruby</a>, <a class='category' href='/categories/sequel/'>sequel</a>, <a class='category' href='/categories/sinatra/'>sinatra</a>, <a class='category' href='/categories/thin/'>thin</a>, <a class='category' href='/categories/twitter/'>twitter</a></span>
-</footer>
+<!--more-->
 
 
-</article>
+<p>One of the <em>modi operandi</em> of Judge is to use the power of the <a href="http://api.rubyonrails.org/classes/ActionView/Helpers/FormBuilder.html">FormBuilder</a> to great effect.  Coding forms is one of the great pains of front-end web development and I feel pretty confident in saying that nobody ever gets it completely right. <a href="https://rubygems.org/gems/formtastic">Formtastic</a> can help take some of the repetition and view clutter out of the process.</p>
+
+<p>Adding Judge support to Formtastic turned out to be pretty easy. In fact, most of my time was spent marvelling at the Formtastic test suite, which is end-of-level bonkers.</p>
+
+<h2>Install</h2>
+
+<figure class='code'><figcaption><span>Gemfile </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>gem "judge-formtastic", "~> 0.1", :require => "judge/formtastic"</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Sorry about the require option. The most recently released version of Bundler (<a href="https://rubygems.org/gems/bundler/versions/1.0.22">1.0.22 at time of writing</a>) doesn&#8217;t correctly translate hyphen-delimited gem names into file paths before autorequiring. There&#8217;s a <a href="https://github.com/carlhuda/bundler/issues/1205">fix for this</a> already but I don&#8217;t know when Bundler 1.1 will be released.</p>
+
+<h2>Usage</h2>
+
+<p>Add <code>:validate => true</code> to your input options.  That&#8217;s it.</p>
+
+<figure class='code'><figcaption><span>app/views/users/new.html.erb  </span></figcaption>
+ <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="o">&lt;</span><span class="sx">%= semantic_form_for(@user) do |f| %&gt;</span>
+</span><span class='line'><span class="sx">  &lt;%=</span> <span class="n">f</span><span class="o">.</span><span class="n">input</span> <span class="ss">:name</span><span class="p">,</span> <span class="ss">:validate</span> <span class="o">=&gt;</span> <span class="kp">true</span> <span class="sx">%&gt;</span>
+</span><span class='line'><span class="sx">&lt;% end %&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Feedback</h2>
+
+<p>I&#8217;m not a regular Formtastic user. This implementation seems to be the best way to offer Judge support without getting in the way or asking to much of you, the form coder. If you have any thoughts on how this could be improved, please shout at me on <a href="https://github.com/joecorcoran/judge-formtastic/issues">Github Issues</a>.</p>
+
+<ul>
+<li><a href="http://rubygems.org/gems/judge-formtastic">judge-formtastic on rubygems.org</a></li>
+<li><a href="http://github.com/joecorcoran/judge-formtastic">judge-formtastic on GitHub</a></li>
+</ul>
 
 </div>
 
+
+  <footer>
+    <p class="meta">
+      
   
+
+<span class="byline author vcard">Posted by <span class="fn">Joe Corcoran</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-03-01T08:31:00+00:00" pubdate data-updated="true">Mar 1<span>st</span>, 2012</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/categories/active-record/'>active_record</a>, <a class='category' href='/categories/formtastic/'>formtastic</a>, <a class='category' href='/categories/judge/'>judge</a>, <a class='category' href='/categories/rails/'>rails</a>, <a class='category' href='/categories/ruby/'>ruby</a>, <a class='category' href='/categories/validation/'>validation</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://joecorcoran.github.com/2012/03/01/using-judge-with-formtastic" data-via="josephcorcoran" data-counturl="http://joecorcoran.github.com/2012/03/01/using-judge-with-formtastic" >Tweet</a>
+  
+  
+  <div class="g-plusone" data-size="medium"></div>
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/2012/02/28/talking-about-judge-at-lrug" title="Previous Post: Talking about Judge at LRUG">&laquo; Talking about Judge at LRUG</a>
+      
+      
+    </p>
+  </footer>
 </article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
 
 </div>
 
@@ -180,7 +277,10 @@
       var disqus_shortname = 'joecorcoran';
       
         
-        var disqus_script = 'count.js';
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://joecorcoran.github.com/2012/03/01/using-judge-with-formtastic';
+        var disqus_url = 'http://joecorcoran.github.com/2012/03/01/using-judge-with-formtastic';
+        var disqus_script = 'embed.js';
       
     (function () {
       var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;

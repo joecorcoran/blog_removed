@@ -4,7 +4,7 @@
   <title><![CDATA[Category: ruby | Lapping it up with open arms]]></title>
   <link href="http://joecorcoran.github.com/categories/ruby/atom.xml" rel="self"/>
   <link href="http://joecorcoran.github.com/"/>
-  <updated>2012-01-11T17:42:09+00:00</updated>
+  <updated>2012-03-01T10:37:22+00:00</updated>
   <id>http://joecorcoran.github.com/</id>
   <author>
     <name><![CDATA[Joe Corcoran]]></name>
@@ -14,11 +14,58 @@
 
   
   <entry>
+    <title type="html"><![CDATA[Using Judge with Formtastic]]></title>
+    <link href="http://joecorcoran.github.com/2012/03/01/using-judge-with-formtastic"/>
+    <updated>2012-03-01T08:31:00+00:00</updated>
+    <id>http://joecorcoran.github.com/2012/03/01/using-judge-with-formtastic</id>
+    <content type="html"><![CDATA[<p>There's now an extension gem to help you use Judge for client-side validation from within your Formtastic forms.</p>
+
+<!--more-->
+
+
+<p>One of the <em>modi operandi</em> of Judge is to use the power of the <a href="http://api.rubyonrails.org/classes/ActionView/Helpers/FormBuilder.html">FormBuilder</a> to great effect.  Coding forms is one of the great pains of front-end web development and I feel pretty confident in saying that nobody ever gets it completely right. <a href="https://rubygems.org/gems/formtastic">Formtastic</a> can help take some of the repetition and view clutter out of the process.</p>
+
+<p>Adding Judge support to Formtastic turned out to be pretty easy. In fact, most of my time was spent marvelling at the Formtastic test suite, which is end-of-level bonkers.</p>
+
+<h2>Install</h2>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>Gemfile </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>gem "judge-formtastic", "~> 0.1", :require => "judge/formtastic"</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>Sorry about the require option. The most recently released version of Bundler (<a href="https://rubygems.org/gems/bundler/versions/1.0.22">1.0.22 at time of writing</a>) doesn't correctly translate hyphen-delimited gem names into file paths before autorequiring. There's a <a href="https://github.com/carlhuda/bundler/issues/1205">fix for this</a> already but I don't know when Bundler 1.1 will be released.</p>
+
+<h2>Usage</h2>
+
+<p>Add <code>:validate => true</code> to your input options.  That's it.</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>app/views/users/new.html.erb  </span></figcaption>
+ <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="sx">%= semantic_form_for(@user) do |f| %&gt;</span>
+</span><span class='line'><span class="sx">  &amp;lt;%=</span> <span class="n">f</span><span class="o">.</span><span class="n">input</span> <span class="ss">:name</span><span class="p">,</span> <span class="ss">:validate</span> <span class="o">=&gt;</span> <span class="kp">true</span> <span class="sx">%&gt;</span>
+</span><span class='line'><span class="sx">&amp;lt;% end %&gt;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<h2>Feedback</h2>
+
+<p>I'm not a regular Formtastic user. This implementation seems to be the best way to offer Judge support without getting in the way or asking to much of you, the form coder. If you have any thoughts on how this could be improved, please shout at me on <a href="https://github.com/joecorcoran/judge-formtastic/issues">Github Issues</a>.</p>
+
+<ul>
+<li><a href="http://rubygems.org/gems/judge-formtastic">judge-formtastic on rubygems.org</a></li>
+<li><a href="http://github.com/joecorcoran/judge-formtastic">judge-formtastic on GitHub</a></li>
+</ul>
+
+]]></content>
+  </entry>
+  
+  <entry>
     <title type="html"><![CDATA[Judge: Simple JavaScript form validation for Rails]]></title>
     <link href="http://joecorcoran.github.com/2011/11/15/judge-simple-javascript-form-validation-for-rails"/>
     <updated>2011-11-15T13:17:00+00:00</updated>
     <id>http://joecorcoran.github.com/2011/11/15/judge-simple-javascript-form-validation-for-rails</id>
-    <content type="html"><![CDATA[<p>Since version 1.0 has just been released and I've settled on what I hope is a friendly interface, I thought it was probably time I wrote a bit about <a href="https://rubygems.org/gems/judge">Judge</a>, my client side form validation gem for Rails 3.</p>
+    <content type="html"><![CDATA[<p>Since version 1.0 has just been released and I've settled on what I hope is a friendly interface, I thought it was probably time I wrote a bit about <a href="https://rubygems.org/gems/judge">Judge</a>, my client-side form validation gem for Rails 3.</p>
 
 <!--more-->
 
@@ -27,7 +74,7 @@
 
 <p>There are some other gems out there that attempt to solve this problem, so it would be remiss of me not to mention them. <a href="https://github.com/bcardarella/client_side_validations" title="Client Side Validations gem by Brian Cardarella">Client Side Validations</a> is feature-rich and does a lot of work for you.  There's also <a href="https://github.com/alechill/livevalidation" title="LiveValidation by Alec Hill">LiveValidation</a>, which has been around for a long time and might be a good choice for people with legacy Rails apps that need Prototype.</p>
 
-<p>I wanted a solution that was as small as possible. This is a simple job – no need for middleware, no need for extensions to core Ruby classes.  I also wanted it to be as flexible as possible - no assumptions should be made about form markup, styles, classes and so on. I started hacking away, using the jQuery plugin pattern as a starting point for the client side code. It soon became clear that jQuery had to go. Writing Judge as a jQuery plugin was a mistake – the code I wrote ended up tightly coupled to specific event bindings, specific DOM elements etc. That kind of stuff should really be left for the user to decide.</p>
+<p>I wanted a solution that was as small as possible. This is a simple job – no need for middleware, no need for extensions to core Ruby classes.  I also wanted it to be as flexible as possible - no assumptions should be made about form markup, styles, classes and so on. I started hacking away, using the jQuery plugin pattern as a starting point for the client-side code. It soon became clear that jQuery had to go. Writing Judge as a jQuery plugin was a mistake – the code I wrote ended up tightly coupled to specific event bindings, specific DOM elements etc. That kind of stuff should really be left for the user to decide.</p>
 
 <h2>Examples</h2>
 
@@ -44,7 +91,7 @@
 </span><span class='line'><span class="k">end</span>
 </span></code></pre></td></tr></table></div></figure></notextile></div></p>
 
-<p>Use the <code>Judge::FormBuilder</code> in your view. Add <code>:validate => true</code> to the options hash of any form element that you wish to validate on the client side.</p>
+<p>Use the <code>Judge::FormBuilder</code> in your view. Add <code>:validate => true</code> to the options hash of any form element that you wish to validate on the client-side.</p>
 
 <p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>app/views/things/new.html.erb  </span></figcaption>
  <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>

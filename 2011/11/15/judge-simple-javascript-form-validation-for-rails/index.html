@@ -100,7 +100,7 @@
   </header>
 
 
-<div class="entry-content"><p>Since version 1.0 has just been released and I&#8217;ve settled on what I hope is a friendly interface, I thought it was probably time I wrote a bit about <a href="https://rubygems.org/gems/judge">Judge</a>, my client side form validation gem for Rails 3.</p>
+<div class="entry-content"><p>Since version 1.0 has just been released and I&#8217;ve settled on what I hope is a friendly interface, I thought it was probably time I wrote a bit about <a href="https://rubygems.org/gems/judge">Judge</a>, my client-side form validation gem for Rails 3.</p>
 
 <!--more-->
 
@@ -109,7 +109,7 @@
 
 <p>There are some other gems out there that attempt to solve this problem, so it would be remiss of me not to mention them. <a href="https://github.com/bcardarella/client_side_validations" title="Client Side Validations gem by Brian Cardarella">Client Side Validations</a> is feature-rich and does a lot of work for you.  There&#8217;s also <a href="https://github.com/alechill/livevalidation" title="LiveValidation by Alec Hill">LiveValidation</a>, which has been around for a long time and might be a good choice for people with legacy Rails apps that need Prototype.</p>
 
-<p>I wanted a solution that was as small as possible. This is a simple job – no need for middleware, no need for extensions to core Ruby classes.  I also wanted it to be as flexible as possible - no assumptions should be made about form markup, styles, classes and so on. I started hacking away, using the jQuery plugin pattern as a starting point for the client side code. It soon became clear that jQuery had to go. Writing Judge as a jQuery plugin was a mistake – the code I wrote ended up tightly coupled to specific event bindings, specific DOM elements etc. That kind of stuff should really be left for the user to decide.</p>
+<p>I wanted a solution that was as small as possible. This is a simple job – no need for middleware, no need for extensions to core Ruby classes.  I also wanted it to be as flexible as possible - no assumptions should be made about form markup, styles, classes and so on. I started hacking away, using the jQuery plugin pattern as a starting point for the client-side code. It soon became clear that jQuery had to go. Writing Judge as a jQuery plugin was a mistake – the code I wrote ended up tightly coupled to specific event bindings, specific DOM elements etc. That kind of stuff should really be left for the user to decide.</p>
 
 <h2>Examples</h2>
 
@@ -127,7 +127,7 @@
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>Use the <code>Judge::FormBuilder</code> in your view. Add <code>:validate => true</code> to the options hash of any form element that you wish to validate on the client side.</p>
+<p>Use the <code>Judge::FormBuilder</code> in your view. Add <code>:validate => true</code> to the options hash of any form element that you wish to validate on the client-side.</p>
 
 <figure class='code'><figcaption><span>app/views/things/new.html.erb  </span></figcaption>
  <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
@@ -288,6 +288,8 @@
         <a class="basic-alignment left" href="/2010/11/12/testing-bound-jquery-events" title="Previous Post: Testing bound jQuery events">&laquo; Testing bound jQuery events</a>
       
       
+        <a class="basic-alignment right" href="/2012/02/28/talking-about-judge-at-lrug" title="next Post: Talking about Judge at LRUG">Talking about Judge at LRUG &raquo;</a>
+      
     </p>
   </footer>
 </article>
@@ -310,6 +312,14 @@
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/2012/03/01/using-judge-with-formtastic">Using Judge with Formtastic</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2012/02/28/talking-about-judge-at-lrug">Talking about Judge at LRUG</a>
+      </li>
+    
+      <li class="post">
         <a href="/2011/11/15/judge-simple-javascript-form-validation-for-rails">Judge: Simple JavaScript form validation for Rails</a>
       </li>
     
@@ -319,14 +329,6 @@
     
       <li class="post">
         <a href="/2010/09/01/when-sammy-met-jasmine">When Sammy Met Jasmine</a>
-      </li>
-    
-      <li class="post">
-        <a href="/2010/02/01/announcing-tweet-fighter">Announcing Tweet Fighter</a>
-      </li>
-    
-      <li class="post">
-        <a href="/2009/07/02/practical-uses-for-sammy">Practical uses for Sammy</a>
       </li>
     
   </ul>
