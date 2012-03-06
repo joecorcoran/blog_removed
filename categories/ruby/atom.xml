@@ -4,7 +4,7 @@
   <title><![CDATA[Category: ruby | Lapping it up with open arms]]></title>
   <link href="http://joecorcoran.github.com/categories/ruby/atom.xml" rel="self"/>
   <link href="http://joecorcoran.github.com/"/>
-  <updated>2012-03-01T10:37:22+00:00</updated>
+  <updated>2012-03-06T10:47:58+00:00</updated>
   <id>http://joecorcoran.github.com/</id>
   <author>
     <name><![CDATA[Joe Corcoran]]></name>
@@ -50,7 +50,7 @@
 
 <h2>Feedback</h2>
 
-<p>I'm not a regular Formtastic user. This implementation seems to be the best way to offer Judge support without getting in the way or asking to much of you, the form coder. If you have any thoughts on how this could be improved, please shout at me on <a href="https://github.com/joecorcoran/judge-formtastic/issues">Github Issues</a>.</p>
+<p>I'm not a regular Formtastic user. This implementation seems to be the best way to offer Judge support without getting in the way or asking too much of you, the form coder. If you have any thoughts on how this could be improved, please shout at me on <a href="https://github.com/joecorcoran/judge-formtastic/issues">Github Issues</a>.</p>
 
 <ul>
 <li><a href="http://rubygems.org/gems/judge-formtastic">judge-formtastic on rubygems.org</a></li>
