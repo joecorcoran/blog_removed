@@ -4,7 +4,7 @@
   <title><![CDATA[Category: formtastic | Lapping it up with open arms]]></title>
   <link href="http://joecorcoran.github.com/categories/formtastic/atom.xml" rel="self"/>
   <link href="http://joecorcoran.github.com/"/>
-  <updated>2012-03-06T10:47:58+00:00</updated>
+  <updated>2012-03-07T22:42:32+00:00</updated>
   <id>http://joecorcoran.github.com/</id>
   <author>
     <name><![CDATA[Joe Corcoran]]></name>
@@ -18,12 +18,12 @@
     <link href="http://joecorcoran.github.com/2012/03/01/using-judge-with-formtastic"/>
     <updated>2012-03-01T08:31:00+00:00</updated>
     <id>http://joecorcoran.github.com/2012/03/01/using-judge-with-formtastic</id>
-    <content type="html"><![CDATA[<p>There's now an extension gem to help you use Judge for client-side validation from within your Formtastic forms.</p>
+    <content type="html"><![CDATA[<p>There's now an extension gem to help you use <a href="http://github.com/joecorcoran/judge">Judge</a> for client-side validation from within your <a href="https://rubygems.org/gems/formtastic">Formtastic</a> forms.</p>
 
 <!--more-->
 
 
-<p>One of the <em>modi operandi</em> of Judge is to use the power of the <a href="http://api.rubyonrails.org/classes/ActionView/Helpers/FormBuilder.html">FormBuilder</a> to great effect.  Coding forms is one of the great pains of front-end web development and I feel pretty confident in saying that nobody ever gets it completely right. <a href="https://rubygems.org/gems/formtastic">Formtastic</a> can help take some of the repetition and view clutter out of the process.</p>
+<p>One of the <em>modi operandi</em> of Judge is to use the power of the <a href="http://api.rubyonrails.org/classes/ActionView/Helpers/FormBuilder.html">FormBuilder</a> to great effect.  Coding forms is one of the great pains of front-end web development and I feel pretty confident in saying that nobody ever gets it completely right. Formtastic can help take some of the repetition and view clutter out of the process.</p>
 
 <p>Adding Judge support to Formtastic turned out to be pretty easy. In fact, most of my time was spent marvelling at the Formtastic test suite, which is end-of-level bonkers.</p>
 

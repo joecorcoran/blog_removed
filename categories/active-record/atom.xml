@@ -4,7 +4,7 @@
   <title><![CDATA[Category: active_record | Lapping it up with open arms]]></title>
   <link href="http://joecorcoran.github.com/categories/active-record/atom.xml" rel="self"/>
   <link href="http://joecorcoran.github.com/"/>
-  <updated>2012-03-06T10:47:58+00:00</updated>
+  <updated>2012-03-07T22:42:32+00:00</updated>
   <id>http://joecorcoran.github.com/</id>
   <author>
     <name><![CDATA[Joe Corcoran]]></name>
@@ -14,16 +14,55 @@
 
   
   <entry>
-    <title type="html"><![CDATA[Using Judge with Formtastic]]></title>
-    <link href="http://joecorcoran.github.com/2012/03/01/using-judge-with-formtastic"/>
-    <updated>2012-03-01T08:31:00+00:00</updated>
-    <id>http://joecorcoran.github.com/2012/03/01/using-judge-with-formtastic</id>
-    <content type="html"><![CDATA[<p>There's now an extension gem to help you use Judge for client-side validation from within your Formtastic forms.</p>
+    <title type="html"><![CDATA[Using Judge with SimpleForm]]></title>
+    <link href="http://joecorcoran.github.com/2012/03/07/using-judge-with-simpleform"/>
+    <updated>2012-03-07T20:29:00+00:00</updated>
+    <id>http://joecorcoran.github.com/2012/03/07/using-judge-with-simpleform</id>
+    <content type="html"><![CDATA[<p>Following on from my <a href="/2012/03/01/using-judge-with-formtastic">previous post about Formtastic</a>, there's now a <a href="http://github.com/joecorcoran/judge">Judge</a> extension gem for <a href="http://github.com/plataformatec/simple_form">SimpleForm</a> too.</p>
 
 <!--more-->
 
 
-<p>One of the <em>modi operandi</em> of Judge is to use the power of the <a href="http://api.rubyonrails.org/classes/ActionView/Helpers/FormBuilder.html">FormBuilder</a> to great effect.  Coding forms is one of the great pains of front-end web development and I feel pretty confident in saying that nobody ever gets it completely right. <a href="https://rubygems.org/gems/formtastic">Formtastic</a> can help take some of the repetition and view clutter out of the process.</p>
+<p>It's an almost identical affair.</p>
+
+<h2>Install</h2>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>Gemfile </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>gem "judge-simple_form", "~> 0.1", :require => "judge/simple_form"</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p><a href="/2012/03/01/using-judge-with-formtastic">Read here</a> why the require option is necessary.</p>
+
+<h2>Usage</h2>
+
+<p>Add <code>:validate => true</code> to the inputs you want to validate on the front-end.</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>app/views/users/new.html.erb  </span></figcaption>
+ <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="sx">%= simple_form_for(@user) do |f| %&gt;</span>
+</span><span class='line'><span class="sx">  &amp;lt;%=</span> <span class="n">f</span><span class="o">.</span><span class="n">input</span> <span class="ss">:name</span><span class="p">,</span> <span class="ss">:validate</span> <span class="o">=&gt;</span> <span class="kp">true</span> <span class="sx">%&gt;</span>
+</span><span class='line'><span class="sx">&amp;lt;% end %&gt;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<h2>Feedback</h2>
+
+<p>If you're a regular SimpleForm user and you have any ideas about how to improve on this, I'd love to hear from you.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Using Judge with Formtastic]]></title>
+    <link href="http://joecorcoran.github.com/2012/03/01/using-judge-with-formtastic"/>
+    <updated>2012-03-01T08:31:00+00:00</updated>
+    <id>http://joecorcoran.github.com/2012/03/01/using-judge-with-formtastic</id>
+    <content type="html"><![CDATA[<p>There's now an extension gem to help you use <a href="http://github.com/joecorcoran/judge">Judge</a> for client-side validation from within your <a href="https://rubygems.org/gems/formtastic">Formtastic</a> forms.</p>
+
+<!--more-->
+
+
+<p>One of the <em>modi operandi</em> of Judge is to use the power of the <a href="http://api.rubyonrails.org/classes/ActionView/Helpers/FormBuilder.html">FormBuilder</a> to great effect.  Coding forms is one of the great pains of front-end web development and I feel pretty confident in saying that nobody ever gets it completely right. Formtastic can help take some of the repetition and view clutter out of the process.</p>
 
 <p>Adding Judge support to Formtastic turned out to be pretty easy. In fact, most of my time was spent marvelling at the Formtastic test suite, which is end-of-level bonkers.</p>
 
