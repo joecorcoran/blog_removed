@@ -1,45 +1,49 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <urlset xmlns='http://www.sitemaps.org/schemas/sitemap/0.9'>
     <url>
-        <loc>http://joecorcoran.github.com/2009/07/02/practical-uses-for-sammy</loc>
+        <loc>http://blog.joecorcoran.co.uk/2009/07/02/practical-uses-for-sammy</loc>
         <lastmod>2012-03-06T10:46:41+00:00</lastmod>
     </url>
     <url>
-        <loc>http://joecorcoran.github.com/2010/02/01/announcing-tweet-fighter</loc>
+        <loc>http://blog.joecorcoran.co.uk/2010/02/01/announcing-tweet-fighter</loc>
         <lastmod>2012-03-06T10:46:41+00:00</lastmod>
     </url>
     <url>
-        <loc>http://joecorcoran.github.com/2010/09/01/when-sammy-met-jasmine</loc>
+        <loc>http://blog.joecorcoran.co.uk/2010/09/01/when-sammy-met-jasmine</loc>
         <lastmod>2012-03-06T10:46:41+00:00</lastmod>
     </url>
     <url>
-        <loc>http://joecorcoran.github.com/2010/11/12/testing-bound-jquery-events</loc>
+        <loc>http://blog.joecorcoran.co.uk/2010/11/12/testing-bound-jquery-events</loc>
         <lastmod>2012-03-06T10:46:41+00:00</lastmod>
     </url>
     <url>
         <loc>
-            http://joecorcoran.github.com/2011/11/15/judge-simple-javascript-form-validation-for-rails
+            http://blog.joecorcoran.co.uk/2011/11/15/judge-simple-javascript-form-validation-for-rails
         </loc>
         <lastmod>2012-03-06T10:46:41+00:00</lastmod>
     </url>
     <url>
-        <loc>http://joecorcoran.github.com/2012/02/28/talking-about-judge-at-lrug</loc>
+        <loc>http://blog.joecorcoran.co.uk/2012/02/28/talking-about-judge-at-lrug</loc>
         <lastmod>2012-03-06T10:46:41+00:00</lastmod>
     </url>
     <url>
-        <loc>http://joecorcoran.github.com/2012/03/01/using-judge-with-formtastic</loc>
+        <loc>http://blog.joecorcoran.co.uk/2012/03/01/using-judge-with-formtastic</loc>
         <lastmod>2012-03-07T20:35:30+00:00</lastmod>
     </url>
     <url>
-        <loc>http://joecorcoran.github.com/2012/03/07/using-judge-with-simpleform</loc>
+        <loc>http://blog.joecorcoran.co.uk/2012/03/07/using-judge-with-simpleform</loc>
         <lastmod>2012-03-07T22:41:40+00:00</lastmod>
     </url>
     <url>
-        <loc>http://joecorcoran.github.com/archives/</loc>
-        <lastmod>2012-03-07T22:41:40+00:00</lastmod>
+        <loc>http://blog.joecorcoran.co.uk/2012/05/12/an-update-on-judge</loc>
+        <lastmod>2012-04-13T11:40:58+01:00</lastmod>
     </url>
     <url>
-        <loc>http://joecorcoran.github.com/</loc>
-        <lastmod>2012-03-07T22:41:40+00:00</lastmod>
+        <loc>http://blog.joecorcoran.co.uk/archives/</loc>
+        <lastmod>2012-04-13T11:40:58+01:00</lastmod>
+    </url>
+    <url>
+        <loc>http://blog.joecorcoran.co.uk/</loc>
+        <lastmod>2012-04-13T11:40:58+01:00</lastmod>
     </url>
 </urlset>

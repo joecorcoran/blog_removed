@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: bdd | Lapping it up with open arms]]></title>
-  <link href="http://joecorcoran.github.com/categories/bdd/atom.xml" rel="self"/>
-  <link href="http://joecorcoran.github.com/"/>
-  <updated>2012-03-07T22:42:32+00:00</updated>
-  <id>http://joecorcoran.github.com/</id>
+  <link href="http://blog.joecorcoran.co.uk/categories/bdd/atom.xml" rel="self"/>
+  <link href="http://blog.joecorcoran.co.uk/"/>
+  <updated>2012-04-13T11:50:36+01:00</updated>
+  <id>http://blog.joecorcoran.co.uk/</id>
   <author>
     <name><![CDATA[Joe Corcoran]]></name>
     <email><![CDATA[joecorcoran@gmail.com]]></email>
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Testing bound jQuery events]]></title>
-    <link href="http://joecorcoran.github.com/2010/11/12/testing-bound-jquery-events"/>
+    <link href="http://blog.joecorcoran.co.uk/2010/11/12/testing-bound-jquery-events"/>
     <updated>2010-11-12T21:29:00+00:00</updated>
-    <id>http://joecorcoran.github.com/2010/11/12/testing-bound-jquery-events</id>
+    <id>http://blog.joecorcoran.co.uk/2010/11/12/testing-bound-jquery-events</id>
     <content type="html"><![CDATA[<p>I've been using <a href="http://pivotal.github.com/jasmine/">Jasmine</a>, along with velesin's <a href="https://github.com/velesin/jasmine-jquery">jasmine-jquery</a>, to test all of my JavaScript work recently.  jasmine-jquery provides some really handy matchers, but one thing that's missing is the ability to test whether an element has a bound event.</p>
 
 <!--more-->
@@ -56,9 +56,9 @@
   
   <entry>
     <title type="html"><![CDATA[When Sammy Met Jasmine]]></title>
-    <link href="http://joecorcoran.github.com/2010/09/01/when-sammy-met-jasmine"/>
+    <link href="http://blog.joecorcoran.co.uk/2010/09/01/when-sammy-met-jasmine"/>
     <updated>2010-09-01T21:37:00+01:00</updated>
-    <id>http://joecorcoran.github.com/2010/09/01/when-sammy-met-jasmine</id>
+    <id>http://blog.joecorcoran.co.uk/2010/09/01/when-sammy-met-jasmine</id>
     <content type="html"><![CDATA[<h2>Testing Sammy JavaScript apps with Pivotal Labs' Jasmine BDD framework</h2>
 
 <p>Aaron Quint's route-driven JavaScript framework <a href="http://github.com/quirkey/sammy" title="Sammy framework on GitHub">Sammy</a>, ships with <a href="http://github.com/jquery/qunit/" title="QUnit jQuery testing framework on GitHub">QUnit</a> tests. This is an obvious choice, since QUnit is jQuery's test framework and Sammy depends on jQuery. I, however, am not the biggest fan of QUnit. It works really well, but I find the syntax a little unwieldy.  On a recent project, I thought I'd try out <a href="http://github.com/pivotal/jasmine">Jasmine – a library-independent JavaScript <acronym title="Behaviour Driven Development">BDD</acronym> framework</a> with a more readable syntax.</p>

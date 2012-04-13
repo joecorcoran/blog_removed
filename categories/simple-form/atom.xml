@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: simple_form | Lapping it up with open arms]]></title>
-  <link href="http://joecorcoran.github.com/categories/simple-form/atom.xml" rel="self"/>
-  <link href="http://joecorcoran.github.com/"/>
-  <updated>2012-03-07T22:42:32+00:00</updated>
-  <id>http://joecorcoran.github.com/</id>
+  <link href="http://blog.joecorcoran.co.uk/categories/simple-form/atom.xml" rel="self"/>
+  <link href="http://blog.joecorcoran.co.uk/"/>
+  <updated>2012-04-13T11:50:36+01:00</updated>
+  <id>http://blog.joecorcoran.co.uk/</id>
   <author>
     <name><![CDATA[Joe Corcoran]]></name>
     <email><![CDATA[joecorcoran@gmail.com]]></email>
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Using Judge with SimpleForm]]></title>
-    <link href="http://joecorcoran.github.com/2012/03/07/using-judge-with-simpleform"/>
+    <link href="http://blog.joecorcoran.co.uk/2012/03/07/using-judge-with-simpleform"/>
     <updated>2012-03-07T20:29:00+00:00</updated>
-    <id>http://joecorcoran.github.com/2012/03/07/using-judge-with-simpleform</id>
+    <id>http://blog.joecorcoran.co.uk/2012/03/07/using-judge-with-simpleform</id>
     <content type="html"><![CDATA[<p>Following on from my <a href="/2012/03/01/using-judge-with-formtastic">previous post about Formtastic</a>, there's now a <a href="http://github.com/joecorcoran/judge">Judge</a> extension gem for <a href="http://github.com/plataformatec/simple_form">SimpleForm</a> too.</p>
 
 <!--more-->

@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: sinatra | Lapping it up with open arms]]></title>
-  <link href="http://joecorcoran.github.com/categories/sinatra/atom.xml" rel="self"/>
-  <link href="http://joecorcoran.github.com/"/>
-  <updated>2012-03-07T22:42:32+00:00</updated>
-  <id>http://joecorcoran.github.com/</id>
+  <link href="http://blog.joecorcoran.co.uk/categories/sinatra/atom.xml" rel="self"/>
+  <link href="http://blog.joecorcoran.co.uk/"/>
+  <updated>2012-04-13T11:50:36+01:00</updated>
+  <id>http://blog.joecorcoran.co.uk/</id>
   <author>
     <name><![CDATA[Joe Corcoran]]></name>
     <email><![CDATA[joecorcoran@gmail.com]]></email>
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Announcing Tweet Fighter]]></title>
-    <link href="http://joecorcoran.github.com/2010/02/01/announcing-tweet-fighter"/>
+    <link href="http://blog.joecorcoran.co.uk/2010/02/01/announcing-tweet-fighter"/>
     <updated>2010-02-01T21:46:00+00:00</updated>
-    <id>http://joecorcoran.github.com/2010/02/01/announcing-tweet-fighter</id>
+    <id>http://blog.joecorcoran.co.uk/2010/02/01/announcing-tweet-fighter</id>
     <content type="html"><![CDATA[<p>Firstly: allow me to bash the bible for a few lines.  Over the past year or so I've become enamoured with <a href="http://www.sinatrarb.com/" title="Sinatra, a Ruby HTTP framework">Sinatra, the Ruby microframework</a>.  I've toyed with it, pushed it around, made it do things it didn't want to do, locked it out in the cold and like a terminally happy pet, it still keeps coming back for more.  Sinatra's versatility is a product of its simplicity – it does its job well and the rest is up to you.  Anyway, enough proselytising… on to <a href="http://tweetfight.me">Tweet Fighter</a>.</p>
 
 <!--more-->

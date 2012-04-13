@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Lapping it up with open arms]]></title>
-  <link href="http://joecorcoran.github.com/atom.xml" rel="self"/>
-  <link href="http://joecorcoran.github.com/"/>
-  <updated>2012-03-07T22:42:32+00:00</updated>
-  <id>http://joecorcoran.github.com/</id>
+  <link href="http://blog.joecorcoran.co.uk/atom.xml" rel="self"/>
+  <link href="http://blog.joecorcoran.co.uk/"/>
+  <updated>2012-04-13T11:50:36+01:00</updated>
+  <id>http://blog.joecorcoran.co.uk/</id>
   <author>
     <name><![CDATA[Joe Corcoran]]></name>
     <email><![CDATA[joecorcoran@gmail.com]]></email>
@@ -14,11 +14,168 @@
 
   
   <entry>
+    <title type="html"><![CDATA[An update on Judge]]></title>
+    <link href="http://blog.joecorcoran.co.uk/2012/05/12/an-update-on-judge"/>
+    <updated>2012-05-12T08:30:00+01:00</updated>
+    <id>http://blog.joecorcoran.co.uk/2012/05/12/an-update-on-judge</id>
+    <content type="html"><![CDATA[<p>I&#8217;ve just released <a href="https://rubygems.org/gems/judge/versions/1.5.0">Judge 1.5.0</a> and since it&#8217;s been a while since the last update, I thought I&#8217;d run through some of the improvements that have been made since version 1.0.0 and also introduce some ideas for future improvements.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>gem "judge", "~> 1.5.0"</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<!--more-->
+
+
+<h2>Callbacks</h2>
+
+<p>The various <code>validate()</code> methods now accept callback functions. Yep, real modern. The cool thing about this is that we can handle what happens after validation a little more elegantly. Behold!</p>
+
+<p><code>watcher.validate([callback])</code></p>
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">var</span> <span class="nx">watcher</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">judge</span><span class="p">.</span><span class="nx">Watcher</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">&#39;foo&#39;</span><span class="p">));</span>
+</span><span class='line'><span class="nx">watcher</span><span class="p">.</span><span class="nx">validate</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">valid</span><span class="p">,</span> <span class="nx">messages</span><span class="p">,</span> <span class="nx">element</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="nx">element</span><span class="p">.</span><span class="nx">style</span><span class="p">.</span><span class="nx">background</span> <span class="o">=</span> <span class="nx">valid</span> <span class="o">?</span> <span class="s1">&#39;green&#39;</span> <span class="o">:</span> <span class="s1">&#39;red&#39;</span><span class="p">;</span>
+</span><span class='line'><span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><code>judge.validate(elements, [callback])</code></p>
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="c1">// callback is executed once for each input</span>
+</span><span class='line'><span class="nx">judge</span><span class="p">.</span><span class="nx">validate</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">getElementsByTagName</span><span class="p">(</span><span class="s1">&#39;input&#39;</span><span class="p">),</span> <span class="kd">function</span><span class="p">(</span><span class="nx">valid</span><span class="p">,</span> <span class="nx">messages</span><span class="p">,</span> <span class="nx">element</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="nx">element</span><span class="p">.</span><span class="nx">style</span><span class="p">.</span><span class="nx">background</span> <span class="o">=</span> <span class="nx">valid</span> <span class="o">?</span> <span class="s1">&#39;green&#39;</span> <span class="o">:</span> <span class="s1">&#39;red&#39;</span><span class="p">;</span>
+</span><span class='line'><span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><code>judge.store.validate(key, [callback])</code></p>
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">judge</span><span class="p">.</span><span class="nx">store</span><span class="p">.</span><span class="nx">save</span><span class="p">(</span><span class="s1">&#39;foo&#39;</span><span class="p">,</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">&#39;foo&#39;</span><span class="p">));</span>
+</span><span class='line'><span class="c1">// callback is executed once for each element stored </span>
+</span><span class='line'><span class="c1">// against key &#39;foo&#39; (in this case just once)</span>
+</span><span class='line'><span class="nx">judge</span><span class="p">.</span><span class="nx">store</span><span class="p">.</span><span class="nx">validate</span><span class="p">(</span><span class="s1">&#39;foo&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">valid</span><span class="p">,</span> <span class="nx">messages</span><span class="p">,</span> <span class="nx">element</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="nx">element</span><span class="p">.</span><span class="nx">style</span><span class="p">.</span><span class="nx">background</span> <span class="o">=</span> <span class="nx">valid</span> <span class="o">?</span> <span class="s1">&#39;green&#39;</span> <span class="o">:</span> <span class="s1">&#39;red&#39;</span><span class="p">;</span>
+</span><span class='line'><span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>I18n</h2>
+
+<p>Internationalized error messages are sweet.  Remember when Rails didn&#8217;t do this?  Oh man. Bad times. They&#8217;re still a bit confusing though. There are a lot of bad custom validator examples sitting around on the web, just waiting to be copied and pasted into some poor, unsuspecting app. Don&#8217;t do this:</p>
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">FooValidator</span> <span class="o">&lt;</span> <span class="no">ActiveModel</span><span class="o">::</span><span class="no">EachValidator</span>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">validate_each</span><span class="p">(</span><span class="n">record</span><span class="p">,</span> <span class="n">attribute</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+</span><span class='line'>    <span class="k">if</span> <span class="n">value</span> <span class="o">!=</span> <span class="s2">&quot;foo&quot;</span>
+</span><span class='line'>      <span class="n">record</span><span class="o">.</span><span class="n">errors</span><span class="o">[</span><span class="n">attribute</span><span class="o">]</span> <span class="o">&lt;&lt;</span> <span class="s2">&quot;ain&#39;t foo&quot;</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><a href="http://en.wikipedia.org/wiki/Magic_number_(programming)">That rogue error message is doing nobody any favours</a>. The errors object has an <code>add</code> method which will handle i18n translation lookup for you:</p>
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">FooValidator</span> <span class="o">&lt;</span> <span class="no">ActiveModel</span><span class="o">::</span><span class="no">EachValidator</span>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">validate_each</span><span class="p">(</span><span class="n">record</span><span class="p">,</span> <span class="n">attribute</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+</span><span class='line'>    <span class="k">if</span> <span class="n">value</span> <span class="o">!=</span> <span class="s2">&quot;foo&quot;</span>
+</span><span class='line'>      <span class="n">record</span><span class="o">.</span><span class="n">errors</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">attribute</span><span class="p">,</span> <span class="ss">:not_foo</span><span class="p">)</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><a href="http://guides.rubyonrails.org/i18n.html#translations-for-active-record-models">You can read about how the error message is looked up over on rubyonrails.org</a>.</p>
+
+<p>Since Judge is all about porting stuff from server- to client-side for great DRY justice, you can now use <code>declare_messages</code> in your custom <code>EachValidator</code> to specify which messages will be made available to your validation methods on the client-side:</p>
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">FooValidator</span> <span class="o">&lt;</span> <span class="no">ActiveModel</span><span class="o">::</span><span class="no">EachValidator</span>
+</span><span class='line'>  <span class="n">declare_messages</span> <span class="ss">:not_foo</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">validate_each</span><span class="p">(</span><span class="n">record</span><span class="p">,</span> <span class="n">attribute</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+</span><span class='line'>    <span class="k">if</span> <span class="n">value</span> <span class="o">!=</span> <span class="s2">&quot;foo&quot;</span>
+</span><span class='line'>      <span class="n">record</span><span class="o">.</span><span class="n">errors</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">attribute</span><span class="p">,</span> <span class="ss">:not_foo</span><span class="p">)</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This means that we can access our translated message like this:</p>
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">judge</span><span class="p">.</span><span class="nx">customValidators</span><span class="p">.</span><span class="nx">foo</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">valid</span><span class="p">,</span> <span class="nx">messages</span><span class="p">,</span> <span class="nx">element</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">messages</span><span class="p">.</span><span class="nx">not_foo</span><span class="p">);</span>
+</span><span class='line'><span class="p">};</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Documentation</h2>
+
+<p>The <a href="http://judge.joecorcoran.co.uk">Judge docs</a> have been spruced up a little too. Please do let me know if anything is unclear.</p>
+
+<h2>The future</h2>
+
+<p>I have a few things that I&#8217;m planning on adding to Judge in the very near future.</p>
+
+<h3>Uniqueness validation</h3>
+
+<p>This isn&#8217;t currently possible with Judge but given the <a href="http://railscasts.com/episodes/277-mountable-engines?view=asciicast">updates to Engines in Rails >= 3.1</a>, I&#8217;m excited about tackling this issue in a clean, unobtrusive way. Watch this space.</p>
+
+<h3>Backbone.Model validation</h3>
+
+<p><a href="http://backbonejs.org/">Backbone.js</a> models have a <a href="http://backbonejs.org/#Model-validate">validate method</a> which, with a little extra work, I think could work really nicely with Judge. I&#8217;m not settled on how to implement this but I have some vague ideas. Suggestions welcome as always.</p>
+]]></content>
+  </entry>
+  
+  <entry>
     <title type="html"><![CDATA[Using Judge with SimpleForm]]></title>
-    <link href="http://joecorcoran.github.com/2012/03/07/using-judge-with-simpleform"/>
+    <link href="http://blog.joecorcoran.co.uk/2012/03/07/using-judge-with-simpleform"/>
     <updated>2012-03-07T20:29:00+00:00</updated>
-    <id>http://joecorcoran.github.com/2012/03/07/using-judge-with-simpleform</id>
-    <content type="html"><![CDATA[<p>Following on from my <a href="http://joecorcoran.github.com/2012/03/01/using-judge-with-formtastic">previous post about Formtastic</a>, there&#8217;s now a <a href="http://github.com/joecorcoran/judge">Judge</a> extension gem for <a href="http://github.com/plataformatec/simple_form">SimpleForm</a> too.</p>
+    <id>http://blog.joecorcoran.co.uk/2012/03/07/using-judge-with-simpleform</id>
+    <content type="html"><![CDATA[<p>Following on from my <a href="http://blog.joecorcoran.co.uk/2012/03/01/using-judge-with-formtastic">previous post about Formtastic</a>, there&#8217;s now a <a href="http://github.com/joecorcoran/judge">Judge</a> extension gem for <a href="http://github.com/plataformatec/simple_form">SimpleForm</a> too.</p>
 
 <!--more-->
 
@@ -32,7 +189,7 @@
 </pre></td><td class='code'><pre><code class=''><span class='line'>gem "judge-simple_form", "~> 0.1", :require => "judge/simple_form"</span></code></pre></td></tr></table></div></figure>
 
 
-<p><a href="http://joecorcoran.github.com/2012/03/01/using-judge-with-formtastic">Read here</a> why the require option is necessary.</p>
+<p><a href="http://blog.joecorcoran.co.uk/2012/03/01/using-judge-with-formtastic">Read here</a> why the require option is necessary.</p>
 
 <h2>Usage</h2>
 
@@ -56,9 +213,9 @@
   
   <entry>
     <title type="html"><![CDATA[Using Judge with Formtastic]]></title>
-    <link href="http://joecorcoran.github.com/2012/03/01/using-judge-with-formtastic"/>
+    <link href="http://blog.joecorcoran.co.uk/2012/03/01/using-judge-with-formtastic"/>
     <updated>2012-03-01T08:31:00+00:00</updated>
-    <id>http://joecorcoran.github.com/2012/03/01/using-judge-with-formtastic</id>
+    <id>http://blog.joecorcoran.co.uk/2012/03/01/using-judge-with-formtastic</id>
     <content type="html"><![CDATA[<p>There&#8217;s now an extension gem to help you use <a href="http://github.com/joecorcoran/judge">Judge</a> for client-side validation from within your <a href="https://rubygems.org/gems/formtastic">Formtastic</a> forms.</p>
 
 <!--more-->
@@ -105,18 +262,18 @@
   
   <entry>
     <title type="html"><![CDATA[Talking about Judge at LRUG]]></title>
-    <link href="http://joecorcoran.github.com/2012/02/28/talking-about-judge-at-lrug"/>
+    <link href="http://blog.joecorcoran.co.uk/2012/02/28/talking-about-judge-at-lrug"/>
     <updated>2012-02-28T20:08:00+00:00</updated>
-    <id>http://joecorcoran.github.com/2012/02/28/talking-about-judge-at-lrug</id>
+    <id>http://blog.joecorcoran.co.uk/2012/02/28/talking-about-judge-at-lrug</id>
     <content type="html"><![CDATA[<p>In January, I gave a talk at the <a href="http://lrug.org/">London Ruby User Group</a> about <a href="http://judge.joecorcoran.co.uk/">Judge</a>. I swore a bit and rambled a bit, as I often do.  I&#8217;ve put the <a href="http://presentations.joecorcoran.co.uk/judge_lrug/">presentation slides up here</a> and the talk is <a href="http://skillsmatter.com/podcast/ajax-ria/judge">available to watch again courtesy of Skills Matter</a>, the venue provider for LRUG.</p>
 ]]></content>
   </entry>
   
   <entry>
     <title type="html"><![CDATA[Judge: Simple JavaScript form validation for Rails]]></title>
-    <link href="http://joecorcoran.github.com/2011/11/15/judge-simple-javascript-form-validation-for-rails"/>
+    <link href="http://blog.joecorcoran.co.uk/2011/11/15/judge-simple-javascript-form-validation-for-rails"/>
     <updated>2011-11-15T13:17:00+00:00</updated>
-    <id>http://joecorcoran.github.com/2011/11/15/judge-simple-javascript-form-validation-for-rails</id>
+    <id>http://blog.joecorcoran.co.uk/2011/11/15/judge-simple-javascript-form-validation-for-rails</id>
     <content type="html"><![CDATA[<p>Since version 1.0 has just been released and I&#8217;ve settled on what I hope is a friendly interface, I thought it was probably time I wrote a bit about <a href="https://rubygems.org/gems/judge">Judge</a>, my client-side form validation gem for Rails 3.</p>
 
 <!--more-->
@@ -260,9 +417,9 @@
   
   <entry>
     <title type="html"><![CDATA[Testing bound jQuery events]]></title>
-    <link href="http://joecorcoran.github.com/2010/11/12/testing-bound-jquery-events"/>
+    <link href="http://blog.joecorcoran.co.uk/2010/11/12/testing-bound-jquery-events"/>
     <updated>2010-11-12T21:29:00+00:00</updated>
-    <id>http://joecorcoran.github.com/2010/11/12/testing-bound-jquery-events</id>
+    <id>http://blog.joecorcoran.co.uk/2010/11/12/testing-bound-jquery-events</id>
     <content type="html"><![CDATA[<p>I&#8217;ve been using <a href="http://pivotal.github.com/jasmine/">Jasmine</a>, along with velesin&#8217;s <a href="https://github.com/velesin/jasmine-jquery">jasmine-jquery</a>, to test all of my JavaScript work recently.  jasmine-jquery provides some really handy matchers, but one thing that&#8217;s missing is the ability to test whether an element has a bound event.</p>
 
 <!--more-->
@@ -301,9 +458,9 @@
   
   <entry>
     <title type="html"><![CDATA[When Sammy Met Jasmine]]></title>
-    <link href="http://joecorcoran.github.com/2010/09/01/when-sammy-met-jasmine"/>
+    <link href="http://blog.joecorcoran.co.uk/2010/09/01/when-sammy-met-jasmine"/>
     <updated>2010-09-01T21:37:00+01:00</updated>
-    <id>http://joecorcoran.github.com/2010/09/01/when-sammy-met-jasmine</id>
+    <id>http://blog.joecorcoran.co.uk/2010/09/01/when-sammy-met-jasmine</id>
     <content type="html"><![CDATA[<h2>Testing Sammy JavaScript apps with Pivotal Labs&#8217; Jasmine BDD framework</h2>
 
 <p>Aaron Quint&#8217;s route-driven JavaScript framework <a href="http://github.com/quirkey/sammy" title="Sammy framework on GitHub">Sammy</a>, ships with <a href="http://github.com/jquery/qunit/" title="QUnit jQuery testing framework on GitHub">QUnit</a> tests. This is an obvious choice, since QUnit is jQuery&#8217;s test framework and Sammy depends on jQuery. I, however, am not the biggest fan of QUnit. It works really well, but I find the syntax a little unwieldy.  On a recent project, I thought I&#8217;d try out <a href="http://github.com/pivotal/jasmine">Jasmine – a library-independent JavaScript <acronym title="Behaviour Driven Development">BDD</acronym> framework</a> with a more readable syntax.</p>
@@ -543,9 +700,9 @@ it('should show something in place of default text', function() {
   
   <entry>
     <title type="html"><![CDATA[Announcing Tweet Fighter]]></title>
-    <link href="http://joecorcoran.github.com/2010/02/01/announcing-tweet-fighter"/>
+    <link href="http://blog.joecorcoran.co.uk/2010/02/01/announcing-tweet-fighter"/>
     <updated>2010-02-01T21:46:00+00:00</updated>
-    <id>http://joecorcoran.github.com/2010/02/01/announcing-tweet-fighter</id>
+    <id>http://blog.joecorcoran.co.uk/2010/02/01/announcing-tweet-fighter</id>
     <content type="html"><![CDATA[<p>Firstly: allow me to bash the bible for a few lines.  Over the past year or so I&#8217;ve become enamoured with <a href="http://www.sinatrarb.com/" title="Sinatra, a Ruby HTTP framework">Sinatra, the Ruby microframework</a>.  I&#8217;ve toyed with it, pushed it around, made it do things it didn&#8217;t want to do, locked it out in the cold and like a terminally happy pet, it still keeps coming back for more.  Sinatra&#8217;s versatility is a product of its simplicity – it does its job well and the rest is up to you.  Anyway, enough proselytising… on to <a href="http://tweetfight.me">Tweet Fighter</a>.</p>
 
 <!--more-->
@@ -588,9 +745,9 @@ it('should show something in place of default text', function() {
   
   <entry>
     <title type="html"><![CDATA[Practical uses for Sammy]]></title>
-    <link href="http://joecorcoran.github.com/2009/07/02/practical-uses-for-sammy"/>
+    <link href="http://blog.joecorcoran.co.uk/2009/07/02/practical-uses-for-sammy"/>
     <updated>2009-07-02T21:52:00+01:00</updated>
-    <id>http://joecorcoran.github.com/2009/07/02/practical-uses-for-sammy</id>
+    <id>http://blog.joecorcoran.co.uk/2009/07/02/practical-uses-for-sammy</id>
     <content type="html"><![CDATA[<p>I&#8217;ve recently been looking into a new Javascript framework named <a href="http://code.quirkey.com/sammy/" title="Sammy homepage at Quirkey.com">Sammy</a>, written by the most excellent <a href="http://www.quirkey.com/blog/" title="Aaron Quint's blog">Aaron Quint</a>.  It was built on top of <a href="http://jquery.com/" title="jQuery site">jQuery</a> and intended to allow developers to build one-page applications, utilising the <acronym title="Uniform Resource Locator">URL</acronym> hash (the portion of the <acronym title="Uniform Resource Locator">URL</acronym> from the # symbol onwards) usually reserved for on-page anchors to give Javascript functions lovely descriptive routes.</p>
 
 <p>I&#8217;m looking forward to writing applications in this way (and I&#8217;m trying to think of an excuse to do so), but what Sammy also kindly allows is direct, linkable access to the inner workings of some of the more usual Javascript implementations too.</p>

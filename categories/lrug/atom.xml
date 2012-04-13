@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: lrug | Lapping it up with open arms]]></title>
-  <link href="http://joecorcoran.github.com/categories/lrug/atom.xml" rel="self"/>
-  <link href="http://joecorcoran.github.com/"/>
-  <updated>2012-03-07T22:42:32+00:00</updated>
-  <id>http://joecorcoran.github.com/</id>
+  <link href="http://blog.joecorcoran.co.uk/categories/lrug/atom.xml" rel="self"/>
+  <link href="http://blog.joecorcoran.co.uk/"/>
+  <updated>2012-04-13T11:50:36+01:00</updated>
+  <id>http://blog.joecorcoran.co.uk/</id>
   <author>
     <name><![CDATA[Joe Corcoran]]></name>
     <email><![CDATA[joecorcoran@gmail.com]]></email>
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Talking about Judge at LRUG]]></title>
-    <link href="http://joecorcoran.github.com/2012/02/28/talking-about-judge-at-lrug"/>
+    <link href="http://blog.joecorcoran.co.uk/2012/02/28/talking-about-judge-at-lrug"/>
     <updated>2012-02-28T20:08:00+00:00</updated>
-    <id>http://joecorcoran.github.com/2012/02/28/talking-about-judge-at-lrug</id>
+    <id>http://blog.joecorcoran.co.uk/2012/02/28/talking-about-judge-at-lrug</id>
     <content type="html"><![CDATA[<p>In January, I gave a talk at the <a href="http://lrug.org/">London Ruby User Group</a> about <a href="http://judge.joecorcoran.co.uk/">Judge</a>. I swore a bit and rambled a bit, as I often do.  I've put the <a href="http://presentations.joecorcoran.co.uk/judge_lrug/">presentation slides up here</a> and the talk is <a href="http://skillsmatter.com/podcast/ajax-ria/judge">available to watch again courtesy of Skills Matter</a>, the venue provider for LRUG.</p>
 ]]></content>
   </entry>

@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: formtastic | Lapping it up with open arms]]></title>
-  <link href="http://joecorcoran.github.com/categories/formtastic/atom.xml" rel="self"/>
-  <link href="http://joecorcoran.github.com/"/>
-  <updated>2012-03-07T22:42:32+00:00</updated>
-  <id>http://joecorcoran.github.com/</id>
+  <link href="http://blog.joecorcoran.co.uk/categories/formtastic/atom.xml" rel="self"/>
+  <link href="http://blog.joecorcoran.co.uk/"/>
+  <updated>2012-04-13T11:50:36+01:00</updated>
+  <id>http://blog.joecorcoran.co.uk/</id>
   <author>
     <name><![CDATA[Joe Corcoran]]></name>
     <email><![CDATA[joecorcoran@gmail.com]]></email>
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Using Judge with Formtastic]]></title>
-    <link href="http://joecorcoran.github.com/2012/03/01/using-judge-with-formtastic"/>
+    <link href="http://blog.joecorcoran.co.uk/2012/03/01/using-judge-with-formtastic"/>
     <updated>2012-03-01T08:31:00+00:00</updated>
-    <id>http://joecorcoran.github.com/2012/03/01/using-judge-with-formtastic</id>
+    <id>http://blog.joecorcoran.co.uk/2012/03/01/using-judge-with-formtastic</id>
     <content type="html"><![CDATA[<p>There's now an extension gem to help you use <a href="http://github.com/joecorcoran/judge">Judge</a> for client-side validation from within your <a href="https://rubygems.org/gems/formtastic">Formtastic</a> forms.</p>
 
 <!--more-->

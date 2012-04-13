@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: active_record | Lapping it up with open arms]]></title>
-  <link href="http://joecorcoran.github.com/categories/active-record/atom.xml" rel="self"/>
-  <link href="http://joecorcoran.github.com/"/>
-  <updated>2012-03-07T22:42:32+00:00</updated>
-  <id>http://joecorcoran.github.com/</id>
+  <link href="http://blog.joecorcoran.co.uk/categories/active-record/atom.xml" rel="self"/>
+  <link href="http://blog.joecorcoran.co.uk/"/>
+  <updated>2012-04-13T11:50:36+01:00</updated>
+  <id>http://blog.joecorcoran.co.uk/</id>
   <author>
     <name><![CDATA[Joe Corcoran]]></name>
     <email><![CDATA[joecorcoran@gmail.com]]></email>
@@ -14,10 +14,172 @@
 
   
   <entry>
+    <title type="html"><![CDATA[An update on Judge]]></title>
+    <link href="http://blog.joecorcoran.co.uk/2012/05/12/an-update-on-judge"/>
+    <updated>2012-05-12T08:30:00+01:00</updated>
+    <id>http://blog.joecorcoran.co.uk/2012/05/12/an-update-on-judge</id>
+    <content type="html"><![CDATA[<p>I've just released <a href="https://rubygems.org/gems/judge/versions/1.5.0">Judge 1.5.0</a> and since it's been a while since the last update, I thought I'd run through some of the improvements that have been made since version 1.0.0 and also introduce some ideas for future improvements.</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>gem "judge", "~> 1.5.0"</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<!--more-->
+
+
+<h2>Callbacks</h2>
+
+<p>The various <code>validate()</code> methods now accept callback functions. Yep, real modern. The cool thing about this is that we can handle what happens after validation a little more elegantly. Behold!</p>
+
+<p><code>watcher.validate([callback])</code>
+<div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">var</span> <span class="nx">watcher</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">judge</span><span class="p">.</span><span class="nx">Watcher</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">&#39;foo&#39;</span><span class="p">));</span>
+</span><span class='line'><span class="nx">watcher</span><span class="p">.</span><span class="nx">validate</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">valid</span><span class="p">,</span> <span class="nx">messages</span><span class="p">,</span> <span class="nx">element</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="nx">element</span><span class="p">.</span><span class="nx">style</span><span class="p">.</span><span class="nx">background</span> <span class="o">=</span> <span class="nx">valid</span> <span class="o">?</span> <span class="s1">&#39;green&#39;</span> <span class="o">:</span> <span class="s1">&#39;red&#39;</span><span class="p">;</span>
+</span><span class='line'><span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p><code>judge.validate(elements, [callback])</code>
+<div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="c1">// callback is executed once for each input</span>
+</span><span class='line'><span class="nx">judge</span><span class="p">.</span><span class="nx">validate</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">getElementsByTagName</span><span class="p">(</span><span class="s1">&#39;input&#39;</span><span class="p">),</span> <span class="kd">function</span><span class="p">(</span><span class="nx">valid</span><span class="p">,</span> <span class="nx">messages</span><span class="p">,</span> <span class="nx">element</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="nx">element</span><span class="p">.</span><span class="nx">style</span><span class="p">.</span><span class="nx">background</span> <span class="o">=</span> <span class="nx">valid</span> <span class="o">?</span> <span class="s1">&#39;green&#39;</span> <span class="o">:</span> <span class="s1">&#39;red&#39;</span><span class="p">;</span>
+</span><span class='line'><span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p><code>judge.store.validate(key, [callback])</code>
+<div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">judge</span><span class="p">.</span><span class="nx">store</span><span class="p">.</span><span class="nx">save</span><span class="p">(</span><span class="s1">&#39;foo&#39;</span><span class="p">,</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">&#39;foo&#39;</span><span class="p">));</span>
+</span><span class='line'><span class="c1">// callback is executed once for each element stored</span>
+</span><span class='line'><span class="c1">// against key &#39;foo&#39; (in this case just once)</span>
+</span><span class='line'><span class="nx">judge</span><span class="p">.</span><span class="nx">store</span><span class="p">.</span><span class="nx">validate</span><span class="p">(</span><span class="s1">&#39;foo&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">valid</span><span class="p">,</span> <span class="nx">messages</span><span class="p">,</span> <span class="nx">element</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="nx">element</span><span class="p">.</span><span class="nx">style</span><span class="p">.</span><span class="nx">background</span> <span class="o">=</span> <span class="nx">valid</span> <span class="o">?</span> <span class="s1">&#39;green&#39;</span> <span class="o">:</span> <span class="s1">&#39;red&#39;</span><span class="p">;</span>
+</span><span class='line'><span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<h2>I18n</h2>
+
+<p>Internationalized error messages are sweet.  Remember when Rails didn't do this?  Oh man. Bad times. They're still a bit confusing though. There are a lot of bad custom validator examples sitting around on the web, just waiting to be copied and pasted into some poor, unsuspecting app. Don't do this:</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">FooValidator</span> <span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span> <span class="no">ActiveModel</span><span class="o">::</span><span class="no">EachValidator</span>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">validate_each</span><span class="p">(</span><span class="n">record</span><span class="p">,</span> <span class="n">attribute</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span><span class="o">&lt;</span><span class="sr">/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;pre&gt;&lt;code&gt;if value != &quot;foo&quot;</span>
+</span><span class='line'><span class="sr">  record.errors[attribute] &amp;lt;&amp;lt; &quot;ain&#39;t foo&quot;</span>
+</span><span class='line'><span class="sr">end</span>
+</span><span class='line'><span class="sr">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;</span><span class="sr">/pre&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;p&gt;  end</span>
+</span><span class='line'><span class="sr">end</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p><a href="http://en.wikipedia.org/wiki/Magic_number_(programming)">That rogue error message is doing nobody any favours</a>. The errors object has an <code>add</code> method which will handle i18n translation lookup for you:</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">FooValidator</span> <span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span> <span class="no">ActiveModel</span><span class="o">::</span><span class="no">EachValidator</span>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">validate_each</span><span class="p">(</span><span class="n">record</span><span class="p">,</span> <span class="n">attribute</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span><span class="o">&lt;</span><span class="sr">/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;pre&gt;&lt;code&gt;if value != &quot;foo&quot;</span>
+</span><span class='line'><span class="sr">  record.errors.add(attribute, :not_foo)</span>
+</span><span class='line'><span class="sr">end</span>
+</span><span class='line'><span class="sr">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;</span><span class="sr">/pre&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;p&gt;  end</span>
+</span><span class='line'><span class="sr">end</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p><a href="http://guides.rubyonrails.org/i18n.html#translations-for-active-record-models">You can read about how the error message is looked up over on rubyonrails.org</a>.</p>
+
+<p>Since Judge is all about porting stuff from server- to client-side for great DRY justice, you can now use <code>declare_messages</code> in your custom <code>EachValidator</code> to specify which messages will be made available to your validation methods on the client-side:</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">FooValidator</span> <span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span> <span class="no">ActiveModel</span><span class="o">::</span><span class="no">EachValidator</span>
+</span><span class='line'>  <span class="n">declare_messages</span> <span class="ss">:not_foo</span><span class="o">&lt;</span><span class="sr">/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;p&gt;  def validate_each(record, attribute, value)&lt;/</span><span class="nb">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="k">if</span> <span class="n">value</span> <span class="o">!=</span> <span class="s2">&quot;foo&quot;</span>
+</span><span class='line'>  <span class="n">record</span><span class="o">.</span><span class="n">errors</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">attribute</span><span class="p">,</span> <span class="ss">:not_foo</span><span class="p">)</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'><span class="o">&lt;</span><span class="sr">/code&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nb">p</span><span class="o">&gt;</span>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>This means that we can access our translated message like this:</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">judge</span><span class="p">.</span><span class="nx">customValidators</span><span class="p">.</span><span class="nx">foo</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">valid</span><span class="p">,</span> <span class="nx">messages</span><span class="p">,</span> <span class="nx">element</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">messages</span><span class="p">.</span><span class="nx">not_foo</span><span class="p">);</span>
+</span><span class='line'><span class="p">};</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<h2>Documentation</h2>
+
+<p>The <a href="http://judge.joecorcoran.co.uk">Judge docs</a> have been spruced up a little too. Please do let me know if anything is unclear.</p>
+
+<h2>The future</h2>
+
+<p>I have a few things that I'm planning on adding to Judge in the very near future.</p>
+
+<h3>Uniqueness validation</h3>
+
+<p>This isn't currently possible with Judge but given the <a href="http://railscasts.com/episodes/277-mountable-engines?view=asciicast">updates to Engines in Rails >= 3.1</a>, I'm excited about tackling this issue in a clean, unobtrusive way. Watch this space.</p>
+
+<h3>Backbone.Model validation</h3>
+
+<p><a href="http://backbonejs.org/">Backbone.js</a> models have a <a href="http://backbonejs.org/#Model-validate">validate method</a> which, with a little extra work, I think could work really nicely with Judge. I'm not settled on how to implement this but I have some vague ideas. Suggestions welcome as always.</p>
+]]></content>
+  </entry>
+  
+  <entry>
     <title type="html"><![CDATA[Using Judge with SimpleForm]]></title>
-    <link href="http://joecorcoran.github.com/2012/03/07/using-judge-with-simpleform"/>
+    <link href="http://blog.joecorcoran.co.uk/2012/03/07/using-judge-with-simpleform"/>
     <updated>2012-03-07T20:29:00+00:00</updated>
-    <id>http://joecorcoran.github.com/2012/03/07/using-judge-with-simpleform</id>
+    <id>http://blog.joecorcoran.co.uk/2012/03/07/using-judge-with-simpleform</id>
     <content type="html"><![CDATA[<p>Following on from my <a href="/2012/03/01/using-judge-with-formtastic">previous post about Formtastic</a>, there's now a <a href="http://github.com/joecorcoran/judge">Judge</a> extension gem for <a href="http://github.com/plataformatec/simple_form">SimpleForm</a> too.</p>
 
 <!--more-->
@@ -54,9 +216,9 @@
   
   <entry>
     <title type="html"><![CDATA[Using Judge with Formtastic]]></title>
-    <link href="http://joecorcoran.github.com/2012/03/01/using-judge-with-formtastic"/>
+    <link href="http://blog.joecorcoran.co.uk/2012/03/01/using-judge-with-formtastic"/>
     <updated>2012-03-01T08:31:00+00:00</updated>
-    <id>http://joecorcoran.github.com/2012/03/01/using-judge-with-formtastic</id>
+    <id>http://blog.joecorcoran.co.uk/2012/03/01/using-judge-with-formtastic</id>
     <content type="html"><![CDATA[<p>There's now an extension gem to help you use <a href="http://github.com/joecorcoran/judge">Judge</a> for client-side validation from within your <a href="https://rubygems.org/gems/formtastic">Formtastic</a> forms.</p>
 
 <!--more-->
@@ -101,9 +263,9 @@
   
   <entry>
     <title type="html"><![CDATA[Judge: Simple JavaScript form validation for Rails]]></title>
-    <link href="http://joecorcoran.github.com/2011/11/15/judge-simple-javascript-form-validation-for-rails"/>
+    <link href="http://blog.joecorcoran.co.uk/2011/11/15/judge-simple-javascript-form-validation-for-rails"/>
     <updated>2011-11-15T13:17:00+00:00</updated>
-    <id>http://joecorcoran.github.com/2011/11/15/judge-simple-javascript-form-validation-for-rails</id>
+    <id>http://blog.joecorcoran.co.uk/2011/11/15/judge-simple-javascript-form-validation-for-rails</id>
     <content type="html"><![CDATA[<p>Since version 1.0 has just been released and I've settled on what I hope is a friendly interface, I thought it was probably time I wrote a bit about <a href="https://rubygems.org/gems/judge">Judge</a>, my client-side form validation gem for Rails 3.</p>
 
 <!--more-->
