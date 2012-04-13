@@ -4,7 +4,7 @@
   <title><![CDATA[Category: simple_form | Lapping it up with open arms]]></title>
   <link href="http://blog.joecorcoran.co.uk/categories/simple-form/atom.xml" rel="self"/>
   <link href="http://blog.joecorcoran.co.uk/"/>
-  <updated>2012-04-13T11:50:36+01:00</updated>
+  <updated>2012-04-13T12:38:53+01:00</updated>
   <id>http://blog.joecorcoran.co.uk/</id>
   <author>
     <name><![CDATA[Joe Corcoran]]></name>
@@ -32,6 +32,12 @@
 </pre></td><td class='code'><pre><code class=''><span class='line'>gem "judge-simple_form", "~> 0.1", :require => "judge/simple_form"</span></code></pre></td></tr></table></div></figure></notextile></div></p>
 
 <p><a href="/2012/03/01/using-judge-with-formtastic">Read here</a> why the require option is necessary.</p>
+
+<p><em>Update: <a href="https://rubygems.org/gems/bundler">Bundler 1.1</a> was released, so the require option is no longer necessary.</em></p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>Gemfile </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>gem "judge-simple_form", "~> 0.1"</span></code></pre></td></tr></table></div></figure></notextile></div></p>
 
 <h2>Usage</h2>
 

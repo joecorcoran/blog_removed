@@ -4,7 +4,7 @@
   <title><![CDATA[Lapping it up with open arms]]></title>
   <link href="http://blog.joecorcoran.co.uk/atom.xml" rel="self"/>
   <link href="http://blog.joecorcoran.co.uk/"/>
-  <updated>2012-04-13T11:50:36+01:00</updated>
+  <updated>2012-04-13T12:38:53+01:00</updated>
   <id>http://blog.joecorcoran.co.uk/</id>
   <author>
     <name><![CDATA[Joe Corcoran]]></name>
@@ -191,6 +191,13 @@
 
 <p><a href="http://blog.joecorcoran.co.uk/2012/03/01/using-judge-with-formtastic">Read here</a> why the require option is necessary.</p>
 
+<p><em>Update: <a href="https://rubygems.org/gems/bundler">Bundler 1.1</a> was released, so the require option is no longer necessary.</em></p>
+
+<figure class='code'><figcaption><span>Gemfile </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>gem "judge-simple_form", "~> 0.1"</span></code></pre></td></tr></table></div></figure>
+
+
 <h2>Usage</h2>
 
 <p>Add <code>:validate => true</code> to the inputs you want to validate on the front-end.</p>
@@ -233,6 +240,13 @@
 
 
 <p>Sorry about the require option. The most recently released version of Bundler (<a href="https://rubygems.org/gems/bundler/versions/1.0.22">1.0.22 at time of writing</a>) doesn&#8217;t correctly translate hyphen-delimited gem names into file paths before autorequiring. There&#8217;s a <a href="https://github.com/carlhuda/bundler/issues/1205">fix for this</a> already but I don&#8217;t know when Bundler 1.1 will be released.</p>
+
+<p><em>Update: <a href="https://rubygems.org/gems/bundler">Bundler 1.1</a> was released, so the require option is no longer necessary.</em></p>
+
+<figure class='code'><figcaption><span>Gemfile </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>gem "judge-formtastic", "~> 0.1"</span></code></pre></td></tr></table></div></figure>
+
 
 <h2>Usage</h2>
 
