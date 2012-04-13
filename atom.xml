@@ -4,7 +4,7 @@
   <title><![CDATA[Lapping it up with open arms]]></title>
   <link href="http://blog.joecorcoran.co.uk/atom.xml" rel="self"/>
   <link href="http://blog.joecorcoran.co.uk/"/>
-  <updated>2012-04-13T12:39:39+01:00</updated>
+  <updated>2012-04-13T14:37:10+01:00</updated>
   <id>http://blog.joecorcoran.co.uk/</id>
   <author>
     <name><![CDATA[Joe Corcoran]]></name>
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[An update on Judge]]></title>
-    <link href="http://blog.joecorcoran.co.uk/2012/05/12/an-update-on-judge"/>
-    <updated>2012-05-12T08:30:00+01:00</updated>
-    <id>http://blog.joecorcoran.co.uk/2012/05/12/an-update-on-judge</id>
+    <link href="http://blog.joecorcoran.co.uk/2012/04/13/an-update-on-judge"/>
+    <updated>2012-04-13T08:30:00+01:00</updated>
+    <id>http://blog.joecorcoran.co.uk/2012/04/13/an-update-on-judge</id>
     <content type="html"><![CDATA[<p>I&#8217;ve just released <a href="https://rubygems.org/gems/judge/versions/1.5.0">Judge 1.5.0</a> and since it&#8217;s been a while since the last update, I thought I&#8217;d run through some of the improvements that have been made since version 1.0.0 and also introduce some ideas for future improvements.</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
